@@ -1,0 +1,16 @@
+## We need C++11 to use TileDB's C++ API
+CXX_STD = CXX11
+
+## We need the TileDB Headers
+PKG_CPPFLAGS =	-I../inst/include/ @TILEDB_INCLUDE@
+
+## We also need the TileDB library
+PKG_LIBS = @TILEDB_LIBS@ @TILEDB_RPATH@
+
+all: $(SHLIB)
+        # if we are
+        #  - not on Window NT (a tip from data.table)
+        #  - on macOS aka Darwin which needs this
+        #  - the library is present (implying non-system library use)
+        # then let us call install_name_tool
+	if [ "$(OS)" != "Windows_NT" ] && [ `uname -s` = 'Darwin' ] && [ -f ../inst/tiledb/lib/libtiledb.dylib ] && [ -f tiledb.so ]; then install_name_tool -change libz.1.dylib @rpath/libz.1.dylib ../inst/tiledb/lib/libtiledb.dylib; install_name_tool -add_rpath @loader_path/../tiledb/lib tiledb.so; fi
