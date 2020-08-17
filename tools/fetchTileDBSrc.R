@@ -1,8 +1,7 @@
 #!/usr/bin/Rscript
 
-os <- "src"
-#base <- "https://dirk.eddelbuettel.com/tldbdl/default/"
-base <- "https://eddelbuettel.github.io/tldbdl/default"
+## by default we download the source from a given release
+url <- "https://github.com/TileDB-Inc/TileDB/archive/2.0.8.tar.gz"
 
-url <- file.path(base, os, paste0("tiledb-", os, ".tar.gz"))
+cat("Downloading ", url, "\n")
 download.file(url, "tiledb.tar.gz", quiet=TRUE)

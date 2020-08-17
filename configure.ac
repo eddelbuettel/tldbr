@@ -83,9 +83,9 @@ AC_ARG_ENABLE([building],
           #)
 
 ## Allow --with-tiledb if given (though system location is found too)
-## (and sets by autconf standards the 'with_tiledb' variable
+## (and sets by autconf standards the 'with_tiledb' variable)
 AC_ARG_WITH([tiledb],
-            AC_HELP_STRING([--with-tiledb=PREFIX],
+            AC_HELP_STRING([--with-tiledb=PATH],
                        [path to installed built of TileDB]),
             [TILEDB_INCLUDE="-I${with_tiledb}/include ${TILEDB_INCLUDE}"
              TILEDB_LIBS="-L${with_tiledb}/lib ${TILEDB_LIBS}"
@@ -98,6 +98,23 @@ AC_ARG_WITH([tiledb],
 if test ! -z "${with_tiledb}" -a x"${enable_building}" = x"yes"; then
     AC_MSG_ERROR([Conflicting choice of preinstalled TileDB and enabling building TileDB.])
 fi
+
+## Allow --with-download if given (though system location is found too)
+## (and sets by autconf standards the 'with_download' variable)
+AC_ARG_WITH([download],
+            AC_HELP_STRING([--with-download=URL],
+                       [URL of TileDB library to download]),
+            [TILEDB_LIB_URL="${with_download}"],
+            [])
+
+## Sanity checks
+if test ! -z "${with_tiledb}" -a x"${with_download}" = x"yes"; then
+    AC_MSG_ERROR([Conflicting choice of preinstalled TileDB and enabling download of TileDB library.])
+fi
+if test ! -z "${with_download}" -a x"${enable_building}" = x"yes"; then
+    AC_MSG_ERROR([Conflicting choice of enabling download of TileDB and enabling building of TileDB.])
+fi
+AC_SUBST([TILEDB_LIB_URL], "${with_download}")
 
 ## Setup
 origCPPFLAGS="${CPPFLAGS}"
@@ -149,15 +166,18 @@ if test x"${have_tiledb}" = x"no"; then
         tools/buildTileDB.sh
 
     ## case two: download considered
-    ##   - on macOS or Linux a 'fast and slim' build with external library
+    ##   - on macOS or Linux a 'fast and slim' build with external (pinned) library
+    ##   - but if a download URL given, use it
     ##   - otherwise error
     else
-        if test x"${uname}" = x"Linux" -o x"${uname}" = x"Darwin"; then
-            #AC_DEFUN([AC_PROG_CURL], [AC_CHECK_PROG(have_curl,curl,yes)])
-            #AC_PROG_CURL
-            #if test x"${have_curl}" != x"yes"; then
-            #    AC_MSG_ERROR([please install 'curl'])
-            #fi
+        ## download URL given by user
+        if test x"${TILEDB_LIB_URL}" != x; then
+            AC_MSG_RESULT([downloading given TileDB library...])
+            ## we use the source download which takes this argument if one given
+            ## and downloads as the same file name
+            cd inst && ../tools/fetchTileDB.sh url ${TILEDB_LIB_URL} && cd ..
+
+        elif test x"${uname}" = x"Linux" -o x"${uname}" = x"Darwin"; then
             AC_MSG_RESULT([downloading TileDB library...])
 
             osrel=`tools/getOsRelease.sh`
