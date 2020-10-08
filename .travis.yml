@@ -1,7 +1,7 @@
 # R package check using Docker containers
 
 os: linux
-dist: bionic
+dist: focal
 sudo: required
 services: docker
 
@@ -11,10 +11,10 @@ jobs:
     #  env: DOCKER_CNTR="tiledb/ci-r"
     - name: 1.7.7
       env: DOCKER_CNTR="eddelbuettel/rocker-tiledb:1.7.7"
-    - name: 2.0.7
-      env: DOCKER_CNTR="eddelbuettel/rocker-tiledb:2.0.7"
     - name: 2.0.8
       env: DOCKER_CNTR="eddelbuettel/rocker-tiledb:2.0.8"
+    - name: 2.1.0
+      env: DOCKER_CNTR="eddelbuettel/rocker-tiledb:2.1.0"
     - name: dev
       env: DOCKER_CNTR="eddelbuettel/rocker-tiledb:dev"
     - name: dwnld
