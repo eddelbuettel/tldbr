@@ -17,8 +17,8 @@ jobs:
       env: DOCKER_CNTR="eddelbuettel/rocker-tiledb:2.1.2"
     - name: dev
       env: DOCKER_CNTR="eddelbuettel/rocker-tiledb:dev"
-    - name: dwnld
-      env: DOCKER_CNTR="eddelbuettel/rocker-tiledb:dl"
+    #- name: dwnld
+    #  env: DOCKER_CNTR="eddelbuettel/rocker-tiledb:dl"
 
 env:
   global:

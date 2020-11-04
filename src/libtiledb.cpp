@@ -210,6 +210,10 @@ const char* _tiledb_layout_to_string(tiledb_layout_t layout) {
       return "GLOBAL_ORDER";
     case TILEDB_UNORDERED:
       return "UNORDERED";
+#if TILEDB_VERSION >= TileDB_Version(2,2,0)
+    case TILEDB_HILBERT:
+      return "HILBERT";
+#endif
     default:
       Rcpp::stop("unknown tiledb_layout_t (%d)", layout);
   }
@@ -224,6 +228,10 @@ tiledb_layout_t _string_to_tiledb_layout(std::string lstr) {
     return TILEDB_GLOBAL_ORDER;
   } else if (lstr == "UNORDERED") {
     return TILEDB_UNORDERED;
+#if TILEDB_VERSION >= TileDB_Version(2,2,0)
+  } else if (lstr == "HILBERT") {
+    return TILEDB_HILBERT;
+#endif
   } else {
     Rcpp::stop("Unknown TileDB layout '%s' ", lstr.c_str());
   }
@@ -2978,4 +2986,26 @@ void libtiledb_stats_dump(std::string path = "") {
     tiledb::Stats::dump(fptr);
     fclose(fptr);
   }
+}
+
+// [[Rcpp::export]]
+void libtiledb_stats_raw_dump(std::string path = "") {
+  if (path == "") {
+    tiledb::Stats::raw_dump();
+  } else {
+    FILE* fptr = nullptr;
+    fptr = fopen(path.c_str(), "w");
+    if (fptr == nullptr) {
+      Rcpp::stop("error opening stats dump file for writing");
+    }
+    tiledb::Stats::raw_dump(fptr);
+    fclose(fptr);
+  }
+}
+
+// [[Rcpp::export]]
+std::string libtiledb_stats_raw_get() {
+  std::string result;
+  tiledb::Stats::raw_dump(&result);
+  return result;
 }
