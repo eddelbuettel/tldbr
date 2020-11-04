@@ -2991,14 +2991,22 @@ void libtiledb_stats_dump(std::string path = "") {
 // [[Rcpp::export]]
 void libtiledb_stats_raw_dump(std::string path = "") {
   if (path == "") {
+#if TILEDB_VERSION >= TileDB_Version(2,1,0)
     tiledb::Stats::raw_dump();
+#else
+    tiledb::Stats::dump();
+#endif
   } else {
     FILE* fptr = nullptr;
     fptr = fopen(path.c_str(), "w");
     if (fptr == nullptr) {
       Rcpp::stop("error opening stats dump file for writing");
     }
+#if TILEDB_VERSION >= TileDB_Version(2,1,0)
     tiledb::Stats::raw_dump(fptr);
+#else
+    tiledb::Stats::dump(fptr);
+#endif
     fclose(fptr);
   }
 }
@@ -3006,6 +3014,8 @@ void libtiledb_stats_raw_dump(std::string path = "") {
 // [[Rcpp::export]]
 std::string libtiledb_stats_raw_get() {
   std::string result;
+#if TILEDB_VERSION >= TileDB_Version(2,1,0)
   tiledb::Stats::raw_dump(&result);
+#endif
   return result;
 }
