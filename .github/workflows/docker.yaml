@@ -1,0 +1,15 @@
+name: docker
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Bootstrap
+      run: |
+        docker pull eddelbuettel/rocker-tiledb:dev
+        docker run --rm -ti -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:dev r -p -e 'sessionInfo()'
+    - name: Dependencies
+      run: docker run --rm -ti -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:dev R CMD build --no-manual .
+    - name: Test
+      run: docker run --rm -ti -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:dev R CMD check --no-manual tiledb_*.tar.gz
