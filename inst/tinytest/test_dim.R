@@ -84,6 +84,8 @@ expect_equal(dim(d), 102L)
 #})
 
 
+if (tiledb_version(TRUE) < "2.1.0") exit_file("Needs TileDB 2.1.* or later")
+
 ## test permissible types for dimension objects -- cf inst/examples/ex_dimensions.R
 ## quick check of various dimension types
 suppressMessages({
