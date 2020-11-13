@@ -6,7 +6,7 @@ name: R-CMD-check
 
 jobs:
   R-CMD-check:
-    name: windows/mingw-w64
+    name: (Windows/mingw-w64)
     runs-on: windows-latest
     steps:
       - run: git config --global core.autocrlf false
