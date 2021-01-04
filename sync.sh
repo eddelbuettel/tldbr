@@ -14,7 +14,8 @@ if [ "$#" -ge 1 ]; then
 fi
 #echo "dryRun is ${dryRun}"
 
-rsync ${args} --exclude='tiledb_*tar.gz' \
+rsync ${args} \
+      --exclude='tiledb_*tar.gz' \
       --exclude=.travis.yml \
       --exclude=.git \
       --exclude=.Rhistory \
@@ -29,4 +30,5 @@ rsync ${args} --exclude='tiledb_*tar.gz' \
       --exclude=GTAGS \
       --exclude=vignettes \
       --exclude=local/tmp \
+      --exclude=.github/workflows \
       ../tiledb-r/ .
