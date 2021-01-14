@@ -28,7 +28,8 @@ rsync ${args} \
       --exclude=GPATH \
       --exclude=GRTAGS \
       --exclude=GTAGS \
-      --exclude=vignettes \
       --exclude=local/tmp \
       --exclude=.github/workflows \
+      --exclude=ex*\.R \
+      --exclude=*~ \
       ../tiledb-r/ .
