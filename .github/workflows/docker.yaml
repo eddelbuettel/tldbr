@@ -29,6 +29,6 @@ jobs:
         docker pull eddelbuettel/rocker-tiledb:${{ matrix.tag }}
         docker run --rm -i -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:${{ matrix.tag }} r -p -e 'sessionInfo()'
     - name: Dependencies
-      run: docker run --rm -i -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:${{ matrix.tag }} R CMD build --no-manual .
+      run: docker run --rm -i -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:${{ matrix.tag }} R CMD build --no-manual --no-build-vignettes .
     - name: Test
-      run: docker run --rm -i -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:${{ matrix.tag }} R CMD check --no-manual tiledb_*.tar.gz
+      run: docker run --rm -i -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:${{ matrix.tag }} R CMD check --no-manual --no-vignettes tiledb_*.tar.gz
