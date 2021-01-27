@@ -18,10 +18,12 @@ jobs:
             tag: 2.1.5
           - name: 2.1.6
             tag: 2.1.6
-          - name: 2.2.0
-            tag: 2.2.0
+          #- name: 2.2.0
+          #  tag: 2.2.0
           - name: 2.2.1
             tag: 2.2.1
+          - name: 2.2.2
+            tag: 2.2.2
     steps:
     - uses: actions/checkout@v2
     - name: Bootstrap
