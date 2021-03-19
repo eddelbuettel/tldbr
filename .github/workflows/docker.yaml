@@ -24,10 +24,12 @@ jobs:
           #  tag: 2.2.1
           #- name: 2.2.3
           #  tag: 2.2.3
-          - name: 2.2.4
-            tag: 2.2.4
+          #- name: 2.2.4
+          #  tag: 2.2.4
           - name: 2.2.5
             tag: 2.2.5
+          - name: 2.2.6
+            tag: 2.2.6
 
     steps:
     - uses: actions/checkout@v2
