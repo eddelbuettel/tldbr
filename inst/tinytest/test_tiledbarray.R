@@ -205,7 +205,7 @@ expect_true(length(attrs(arr)) == 0)
 sels <-  c("age", "job", "education", "duration")
 attrs(arr) <- sels
 dat <- arr[]
-expect_equal(colnames(dat), c("__tiledb_rows", sels))
+expect_equal(colnames(dat), sels)
 extended(arr) <- FALSE
 dat <- arr[]
 expect_equal(colnames(dat), sels)
@@ -585,6 +585,7 @@ if (requireNamespace("bit64", quietly=TRUE)) {
   tiledb_array_create(uri = tmp, schema)
   #print(schema)
   A <- tiledb_array(uri = tmp)
+  query_layout(A) <- "ROW_MAJOR"      # as in issue #222, before PR #226 changed to "COL_MAJOR"
 
   data <- 1:16
   ## can write as data.frame
@@ -615,6 +616,7 @@ if (requireNamespace("bit64", quietly=TRUE)) {
   tiledb_array_create(uri = tmp, schema)
   #print(schema)
   A <- tiledb_array(uri = tmp)
+  query_layout(A) <- "ROW_MAJOR"      # as in issue #222, before PR #226 changed to "COL_MAJOR"
 
   data <- 1:16
   ## can write as data.frame
@@ -645,6 +647,7 @@ if (requireNamespace("bit64", quietly=TRUE)) {
   tiledb_array_create(uri = tmp, schema)
   #print(schema)
   A <- tiledb_array(uri = tmp)
+  query_layout(A) <- "ROW_MAJOR"      # as in issue #222, before PR #226 changed to "COL_MAJOR"
 
   data <- 1:16
   ## can write as data.frame
@@ -675,6 +678,7 @@ if (requireNamespace("bit64", quietly=TRUE)) {
   tiledb_array_create(uri = tmp, schema)
   #print(schema)
   A <- tiledb_array(uri = tmp)
+  query_layout(A) <- "ROW_MAJOR"      # as in issue #222, before PR #226 changed to "COL_MAJOR"
 
   data <- 1:16
   ## can write as data.frame
@@ -705,6 +709,7 @@ if (requireNamespace("bit64", quietly=TRUE)) {
   tiledb_array_create(uri = tmp, schema)
   #print(schema)
   A <- tiledb_array(uri = tmp)
+  query_layout(A) <- "ROW_MAJOR"      # as in issue #222, before PR #226 changed to "COL_MAJOR"
 
   data <- 1:16
   ## can write as data.frame
@@ -735,6 +740,7 @@ if (requireNamespace("bit64", quietly=TRUE)) {
   tiledb_array_create(uri = tmp, schema)
   #print(schema)
   A <- tiledb_array(uri = tmp)
+  query_layout(A) <- "ROW_MAJOR"      # as in issue #222, before PR #226 changed to "COL_MAJOR"
 
   data <- 1:16
   ## can write as data.frame
@@ -765,6 +771,7 @@ if (requireNamespace("bit64", quietly=TRUE)) {
   tiledb_array_create(uri = tmp, schema)
   #print(schema)
   A <- tiledb_array(uri = tmp)
+  query_layout(A) <- "ROW_MAJOR"      # as in issue #222, before PR #226 changed to "COL_MAJOR"
 
   data <- 1:16
   ## can write as data.frame
@@ -796,6 +803,7 @@ if (requireNamespace("bit64", quietly=TRUE)) {
   tiledb_array_create(uri = tmp, schema)
   #print(schema)
   A <- tiledb_array(uri = tmp)
+  query_layout(A) <- "ROW_MAJOR"      # as in issue #222, before PR #226 changed to "COL_MAJOR"
 
   data <- 1:16
   ## can write as data.frame
@@ -837,6 +845,7 @@ if (requireNamespace("bit64", quietly=TRUE)) {
   tiledb_array_create(uri = tmp, schema)
   #print(schema)
   A <- tiledb_array(uri = tmp)
+  query_layout(A) <- "ROW_MAJOR"      # as in issue #222, before PR #226 changed to "COL_MAJOR"
 
   data <- data.frame(a1=1:16,
                      a2=1:16,
@@ -1023,3 +1032,46 @@ A <- tiledb_array(uri = tmp, as.data.frame=TRUE, timestamp=now2 - 0.5)
 expect_equal(nrow(A[]), 3)
 A <- tiledb_array(uri = tmp, as.data.frame=TRUE, timestamp=now2 + 0.5)
 expect_equal(nrow(A[]), 6)
+
+## as.matrix
+tmp <- tempfile()
+dir.create(tmp)
+## Generate a matrix
+n <- 5L
+k <- 4L
+mat <- matrix(1:(n*k), nrow=n, ncol=k)
+dom <- tiledb_domain(dims = c(tiledb_dim("rows", c(1L, n), n, "INT32"),
+                              tiledb_dim("cols", c(1L, k), k, "INT32")))
+schema <- tiledb_array_schema(dom, attrs=tiledb_attr("vals", type="INT32"))
+tiledb_array_create(tmp, schema)
+arr <- tiledb_array(tmp)
+query_layout(arr) <- "COL_MAJOR"    	# needed if we want column order
+arr[] <- mat                        	# we can write directly
+
+arr2 <- tiledb_array(tmp, as.matrix=TRUE)
+mat2 <- arr2[]
+expect_equal(mat, mat2)                 # check round-turn
+
+## check no double selection
+expect_error(tiledb_array(tmp, as.data.frame=TRUE, as.matrix=TRUE))
+## check normal data.frame return when row col select
+expect_true(is.data.frame(suppressMessages(arr2[1:2,])))
+expect_true(is.data.frame(suppressMessages(arr2[,3])))
+
+arr3 <- tiledb_array(tmp, as.data.frame=TRUE)
+df1 <- arr3[]
+df1$vals2 <- df1$vals * 10
+tmp2 <- tempfile()
+fromDataFrame(df1, tmp2)
+
+## check selecting matrix out of multiple cols
+arr4 <- tiledb_array(tmp2, attrs=c("rows", "cols", "vals2"), as.matrix=TRUE)
+expect_equal(arr4[], 10*mat)
+arr5 <- tiledb_array(tmp2, attrs=c("rows", "cols", "vals"), as.matrix=TRUE)
+expect_equal(arr5[], mat)
+arr6 <- tiledb_array(tmp2, attrs=c("rows", "cols", "vals", "vals2"), as.matrix=TRUE)
+res <- arr6[]
+expect_true(is.list(res))
+expect_equal(length(res), 2L)
+expect_equal(res$vals, mat)
+expect_equal(res$vals2, 10*mat)
