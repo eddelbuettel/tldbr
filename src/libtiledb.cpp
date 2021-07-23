@@ -3591,6 +3591,15 @@ void libtiledb_vfs_sync(XPtr<tiledb::Context> ctxxp, XPtr<vfs_fh_t> fh) {
   tiledb_vfs_sync(ctx.get(), static_cast<tiledb_vfs_fh_t*>(fh->fh));
 }
 
+// [[Rcpp::export]]
+double libtiledb_vfs_dir_size(XPtr<tiledb::VFS> vfs, std::string uri) {
+    return static_cast<double>(vfs->dir_size(uri)); // uint64_t to double for R
+}
+
+// [[Rcpp::export]]
+std::vector<std::string> libtiledb_vfs_ls(XPtr<tiledb::VFS> vfs, std::string uri) {
+    return vfs->ls(uri);
+}
 
 /**
  * Stats
