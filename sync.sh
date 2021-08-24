@@ -32,4 +32,5 @@ rsync ${args} \
       --exclude=.github/workflows \
       --exclude=ex*\.R \
       --exclude=*~ \
+      --exclude=local \
       ../tiledb-r/ .
