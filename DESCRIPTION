@@ -1,7 +1,7 @@
 Package: tiledb
 Type: Package
 Version: 0.9.6
-Title: Sparse and Dense Multidimensional Array Storage Engine for Data Science
+Title: R Interface to the TileDB Universal Storage Engine
 Authors@R: c(person("TileDB, Inc.", role = c("aut", "cph")),
  person("Dirk", "Eddelbuettel", email = "dirk@tiledb.com", role = "cre"))
 Description: The data science storage engine 'TileDB' introduces a
