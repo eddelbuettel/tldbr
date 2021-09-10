@@ -448,8 +448,10 @@ bool libtiledb_ctx_is_supported_fs(XPtr<tiledb::Context> ctx, std::string scheme
     return ctx->is_supported_fs(TILEDB_AZURE);
   } else if (scheme == "gcs") {
     return ctx->is_supported_fs(TILEDB_GCS);
+#if TILEDB_VERSION >= TileDB_Version(2,2,0)
   } else if (scheme == "memory") {
     return ctx->is_supported_fs(TILEDB_MEMFS);
+#endif
   } else {
     Rcpp::stop("Unknown TileDB fs scheme: '%s'", scheme.c_str());
   }
