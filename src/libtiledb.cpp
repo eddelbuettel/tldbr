@@ -444,6 +444,12 @@ bool libtiledb_ctx_is_supported_fs(XPtr<tiledb::Context> ctx, std::string scheme
     return ctx->is_supported_fs(TILEDB_S3);
   } else if (scheme == "hdfs") {
     return ctx->is_supported_fs(TILEDB_HDFS);
+  } else if (scheme == "azure") {
+    return ctx->is_supported_fs(TILEDB_AZURE);
+  } else if (scheme == "gcs") {
+    return ctx->is_supported_fs(TILEDB_GCS);
+  } else if (scheme == "memory") {
+    return ctx->is_supported_fs(TILEDB_MEMFS);
   } else {
     Rcpp::stop("Unknown TileDB fs scheme: '%s'", scheme.c_str());
   }
@@ -452,6 +458,15 @@ bool libtiledb_ctx_is_supported_fs(XPtr<tiledb::Context> ctx, std::string scheme
 // [[Rcpp::export]]
 void libtiledb_ctx_set_tag(XPtr<tiledb::Context> ctx, std::string key, std::string value) {
   ctx->set_tag(key, value);
+}
+
+// [[Rcpp::export]]
+std::string libtiledb_ctx_stats(XPtr<tiledb::Context> ctx) {
+#if TILEDB_VERSION >= TileDB_Version(2,4,0)
+    return ctx->stats();
+#else
+    return std::string("");
+#endif
 }
 
 /**
@@ -1707,6 +1722,67 @@ bool libtiledb_array_schema_check(XPtr<tiledb::ArraySchema> schema) {
   return true;
 }
 
+/**
+ * TileDB Array Schema Evolution
+ */
+//[[Rcpp::export]]
+XPtr<tiledb::ArraySchemaEvolution>
+libtiledb_array_schema_evolution(XPtr<tiledb::Context> ctx) {
+#if TILEDB_VERSION >= TileDB_Version(2,4,0)
+    auto p = new tiledb::ArraySchemaEvolution(tiledb::ArraySchemaEvolution(*ctx.get()));
+    auto ptr = XPtr<tiledb::ArraySchemaEvolution>(p, false);
+    registerXptrFinalizer(ptr, libtiledb_arrayschemaevolution_delete);
+#else
+    auto p = new tiledb::ArraySchemaEvolution(tiledb::ArraySchemaEvolution()); // placeholder
+    auto ptr = XPtr<tiledb::ArraySchemaEvolution>(p);
+#endif
+    return ptr;
+}
+
+//[[Rcpp::export]]
+XPtr<tiledb::ArraySchemaEvolution>
+libtiledb_array_schema_evolution_add_attribute(XPtr<tiledb::ArraySchemaEvolution> ase,
+                                               XPtr<tiledb::Attribute> attr) {
+#if TILEDB_VERSION >= TileDB_Version(2,4,0)
+    tiledb::ArraySchemaEvolution res = ase->add_attribute(*attr.get());
+    auto ptr = new tiledb::ArraySchemaEvolution(res);
+    auto xptr = XPtr<tiledb::ArraySchemaEvolution>(ptr, false);
+    registerXptrFinalizer(xptr, libtiledb_arrayschemaevolution_delete);
+    return xptr;
+#else
+    return ase;
+#endif
+}
+
+//[[Rcpp::export]]
+XPtr<tiledb::ArraySchemaEvolution>
+libtiledb_array_schema_evolution_drop_attribute(XPtr<tiledb::ArraySchemaEvolution> ase,
+                                                const std::string & attrname) {
+#if TILEDB_VERSION >= TileDB_Version(2,4,0)
+    tiledb::ArraySchemaEvolution res = ase->drop_attribute(attrname);
+    auto ptr = new tiledb::ArraySchemaEvolution(res);
+    auto xptr = XPtr<tiledb::ArraySchemaEvolution>(ptr, false);
+    registerXptrFinalizer(xptr, libtiledb_arrayschemaevolution_delete);
+    return xptr;
+#else
+    return ase;
+#endif
+}
+
+//[[Rcpp::export]]
+XPtr<tiledb::ArraySchemaEvolution>
+libtiledb_array_schema_evolution_array_evolve(XPtr<tiledb::ArraySchemaEvolution> ase,
+                                              const std::string & uri) {
+#if TILEDB_VERSION >= TileDB_Version(2,4,0)
+    tiledb::ArraySchemaEvolution res = ase->array_evolve(uri);
+    auto ptr = new tiledb::ArraySchemaEvolution(res);
+    auto xptr = XPtr<tiledb::ArraySchemaEvolution>(ptr, false);
+    registerXptrFinalizer(xptr, libtiledb_arrayschemaevolution_delete);
+    return xptr;
+#else
+    return ase;
+#endif
+}
 
 /**
  * TileDB Array
@@ -3253,6 +3329,15 @@ XPtr<tiledb::ArraySchema> libtiledb_query_get_schema(XPtr<tiledb::Query> query,
     return libtiledb_array_schema_load(ctx, arr.uri()); // returns an XPtr<tiledb::ArraySchema>
 #else
     return XPtr<tiledb::ArraySchema>(R_NilValue);
+#endif
+}
+
+// [[Rcpp::export]]
+std::string libtiledb_query_stats(XPtr<tiledb::Query> query) {
+#if TILEDB_VERSION >= TileDB_Version(2,4,0)
+    return query->stats();
+#else
+    return std::string("");
 #endif
 }
 
