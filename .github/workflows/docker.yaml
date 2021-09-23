@@ -4,6 +4,7 @@ jobs:
   checks:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         include:
           - name: dev
@@ -29,7 +30,9 @@ jobs:
       run: |
         docker pull eddelbuettel/rocker-tiledb:${{ matrix.tag }}
         docker run --rm -i -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:${{ matrix.tag }} r -p -e 'sessionInfo()'
-    - name: Dependencies
+    - name: MaybePrune
+      run: docker run --rm -i -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:${{ matrix.tag }} Rscript -e 'if (getRversion() < "4.1.0") unlink("inst/tinytest/test_tiledbarray_410.R")'
+    - name: Build
       run: docker run --rm -i -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:${{ matrix.tag }} R CMD build --no-manual --no-build-vignettes .
     - name: Test
       run: docker run --rm -i -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:${{ matrix.tag }} R CMD check --no-manual --no-vignettes tiledb_*.tar.gz
