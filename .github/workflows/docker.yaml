@@ -30,8 +30,8 @@ jobs:
       run: |
         docker pull eddelbuettel/rocker-tiledb:${{ matrix.tag }}
         docker run --rm -i -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:${{ matrix.tag }} r -p -e 'sessionInfo()'
-    - name: MaybePrune
-      run: docker run --rm -i -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:${{ matrix.tag }} Rscript -e 'if (getRversion() < "4.1.0") unlink("inst/tinytest/test_tiledbarray_410.R")'
+    #- name: MaybePrune
+    #  run: docker run --rm -i -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:${{ matrix.tag }} Rscript -e 'if (getRversion() < "4.1.0") unlink("inst/tinytest/test_tiledbarray_410.R")'
     - name: Build
       run: docker run --rm -i -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:${{ matrix.tag }} R CMD build --no-manual --no-build-vignettes .
     - name: Test
