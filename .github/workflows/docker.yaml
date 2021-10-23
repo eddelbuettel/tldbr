@@ -21,8 +21,8 @@ jobs:
             tag: 2.2.9
           - name: 2.3.4
             tag: 2.3.4
-          - name: 2.4.0
-            tag: 2.4.0
+          - name: 2.4.3
+            tag: 2.4.3
 
     steps:
     - uses: actions/checkout@v2
