@@ -9,6 +9,7 @@ jobs:
         include:
           - name: dev
             tag: dev
+            valgrind: '--use-valgrind'
           - name: dl
             tag: dl
           #- name: 1.7.7
@@ -23,8 +24,9 @@ jobs:
             tag: 2.3.4
           - name: 2.4.3
             tag: 2.4.3
-          - name: 2.5.1
-            tag: 2.5.1
+          - name: 2.5.2
+            tag: 2.5.2
+            valgrind: '--use-valgrind'
 
     steps:
     - uses: actions/checkout@v2
@@ -37,4 +39,4 @@ jobs:
     - name: Build
       run: docker run --rm -i -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:${{ matrix.tag }} R CMD build --no-manual --no-build-vignettes .
     - name: Test
-      run: docker run --rm -i -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:${{ matrix.tag }} R CMD check --no-manual --no-vignettes tiledb_*.tar.gz
+      run: docker run --rm -i -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:${{ matrix.tag }} R CMD check ${{ matrix.valgrind }} --no-manual --no-vignettes tiledb_*.tar.gz
