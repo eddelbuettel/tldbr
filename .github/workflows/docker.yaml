@@ -6,28 +6,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        include:
-          - name: dev
-            tag: dev
-            valgrind: '--use-valgrind'
-          - name: dl
-            tag: dl
-          #- name: 1.7.7
-          #  tag: 1.7.7
-          - name: 2.0.8
-            tag: 2.0.8
-          - name: 2.1.6
-            tag: 2.1.6
-          - name: 2.2.9
-            tag: 2.2.9
-          - name: 2.3.4
-            tag: 2.3.4
-          - name: 2.4.3
-            tag: 2.4.3
-          - name: 2.5.2
-            tag: 2.5.2
-            valgrind: '--use-valgrind'
-
+        include: [
+          { tag: dev, valgrind: '--use-valgrind' },
+          { tag: dl },
+          #{ tag: 1.7.7 },
+          { tag: 2.0.8 },
+          { tag: 2.1.6 },
+          { tag: 2.2.9 },
+          { tag: 2.3.4 },
+          { tag: 2.4.3 },
+          { tag: 2.5.2, valgrind: '--use-valgrind' }
+        ]
     steps:
     - uses: actions/checkout@v2
     - name: Bootstrap
