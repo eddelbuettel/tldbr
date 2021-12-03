@@ -3,6 +3,7 @@ on: [push, pull_request]
 jobs:
   checks:
     runs-on: ubuntu-latest
+    name: ${{ matrix.tag }}
     strategy:
       fail-fast: false
       matrix:
