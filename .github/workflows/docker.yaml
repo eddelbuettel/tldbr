@@ -16,7 +16,7 @@ jobs:
           { tag: 2.2.9 },
           { tag: 2.3.4 },
           { tag: 2.4.3 },
-          { tag: 2.5.2, valgrind: '--use-valgrind' }
+          { tag: 2.5.3, valgrind: '--use-valgrind' }
         ]
     steps:
     - uses: actions/checkout@v2
