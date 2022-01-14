@@ -134,7 +134,7 @@ save_allocation_size_preference <- function(value) {
 ##' @rdname save_allocation_size_preference
 ##' @export
 load_allocation_size_preference <- function() {
-    value <- 1024 * 1024                # fallback value is 1mb
+    value <- 50 * 1024 * 1024           # fallback value is 1mb
     cfgfile <- .defaultConfigFile()     # but check config file
     if (cfgfile != "" && file.exists(cfgfile)) {
         cfg <- read.dcf(cfgfile)
