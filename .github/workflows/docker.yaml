@@ -32,4 +32,4 @@ jobs:
     - name: Test
       run: |
         docker run --rm -i -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:${{ matrix.tag }} R CMD check ${{ matrix.valgrind }} --no-manual --no-vignettes tiledb_*.tar.gz
-        test -f /mnt/tiledb.Rcheck/00check.log && cat /mnt/tiledb.Rcheck/00check.log
+        test -f tiledb.Rcheck/00check.log && cat tiledb.Rcheck/00check.log
