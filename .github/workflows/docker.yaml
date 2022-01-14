@@ -16,7 +16,8 @@ jobs:
           { tag: 2.2.9 },
           { tag: 2.3.4 },
           { tag: 2.4.3 },
-          { tag: 2.5.3, valgrind: '--use-valgrind' }
+          { tag: 2.5.3 },
+          { tag: 2.6.0, valgrind: '--use-valgrind' }
         ]
     steps:
     - uses: actions/checkout@v2
@@ -29,4 +30,6 @@ jobs:
     - name: Build
       run: docker run --rm -i -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:${{ matrix.tag }} R CMD build --no-manual --no-build-vignettes .
     - name: Test
-      run: docker run --rm -i -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:${{ matrix.tag }} R CMD check ${{ matrix.valgrind }} --no-manual --no-vignettes tiledb_*.tar.gz
+      run: |
+        docker run --rm -i -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:${{ matrix.tag }} R CMD check ${{ matrix.valgrind }} --no-manual --no-vignettes tiledb_*.tar.gz
+        test -f /mnt/tiledb.Rcheck/00check.log && cat /mnt/tiledb.Rcheck/00check.log
