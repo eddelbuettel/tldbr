@@ -1,6 +1,6 @@
 #  MIT License
 #
-#  Copyright (c) 2017-2021 TileDB Inc.
+#  Copyright (c) 2017-2022 TileDB Inc.
 #
 #  Permission is hereby granted, free of charge, to any person obtaining a copy
 #  of this software and associated documentation files (the "Software"), to deal
@@ -20,18 +20,36 @@
 #  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 #  SOFTWARE.
 
-#' tiledb - Interface to the TileDB Storage Manager API
+
+#' Generic Methods
 #'
-#' The efficient multi-dimensional array management system
-#' 'TileDB' introduces a novel on-disk format that can effectively store
-#" dense and sparse array data with support for fast updates and
-#' reads. It features excellent compression, an efficient parallel I/O
-#' system which also scales well, and bindings to multiple languages.
+#' Definition of generic methods
 #'
-#' @docType package
-#' @name tiledb-package
-#' @useDynLib tiledb, .registration = TRUE
-#' @importFrom Rcpp sourceCpp
-#' @importFrom methods setClass setGeneric setMethod
-#' @importFrom utils head
+#' @name generics
+#'
+#' @param object A TileDB object
+#' @param value A value to be assigned
+#' @param idx An index argument
+#' @param ... Variable argument
 NULL
+
+
+#' @rdname generics
+#' @param ... Currently unused
+#' @export
+setGeneric("schema", function(object, ...) standardGeneric("schema"))
+
+#' @rdname generics
+#' @param ... Currently unused
+# ' @export
+setGeneric("return.data.frame", function(object, ...) standardGeneric("return.data.frame"))
+
+#' @rdname generics
+# ' @export
+setGeneric("return.data.frame<-", function(x, value) standardGeneric("return.data.frame<-"))
+
+#' @rdname generics
+#' @export
+setGeneric("attrs<-", function(x, value) standardGeneric("attrs<-"))
+
+## TODO: bring other generics here
