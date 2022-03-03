@@ -15,6 +15,8 @@ op <- options()
 options(stringsAsFactors=FALSE)       # accomodate R 3.*
 dir.create(tmp <- tempfile())
 
+set_allocation_size_preference(1024*1014)
+
 d1  <- tiledb_dim("d1",
                   domain = c(as.Date("2001-01-02"), as.Date("2099-12-31")), tile=1L,
                   type="DATETIME_DAY")
