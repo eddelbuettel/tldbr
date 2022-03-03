@@ -8,7 +8,8 @@ jobs:
       fail-fast: false
       matrix:
         include: [
-          { tag: dev, valgrind: '--use-valgrind' },
+          #{ tag: dev, valgrind: '--use-valgrind' },
+          { tag: dev },
           { tag: dl },
           #{ tag: 1.7.7 },
           { tag: 2.0.8 },
@@ -17,7 +18,8 @@ jobs:
           { tag: 2.3.4 },
           { tag: 2.4.3 },
           { tag: 2.5.4 },
-          { tag: 2.6.3, valgrind: '--use-valgrind' }
+          #{ tag: 2.6.3, valgrind: '--use-valgrind' }
+          { tag: 2.6.3 }
         ]
     steps:
     - uses: actions/checkout@v2
@@ -31,5 +33,7 @@ jobs:
       run: docker run --rm -i -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:${{ matrix.tag }} R CMD build --no-manual --no-build-vignettes .
     - name: Test
       run: docker run --rm -i -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:${{ matrix.tag }} R CMD check ${{ matrix.valgrind }} --no-manual --no-vignettes tiledb_*.tar.gz
-    - name: Check Log
-      run: test -f tiledb.Rcheck/00check.log && cat tiledb.Rcheck/00check.log
+    - name: Check Logs
+      run: |
+        test -f tiledb.Rcheck/00check.log && cat tiledb.Rcheck/00check.log
+        test -f tiledb.Rcheck/00check.log && cat tiledb.Rcheck/tests/tinytest.Rout
