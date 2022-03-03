@@ -26,17 +26,19 @@ expect_true(is(fraginf@ptr, "externalptr"))
 
 furi <- tiledb_fragment_info_uri(fraginf, 0)
 expect_true(is.character(furi))
-#expect_true(tiledb_vfs_is_dir(furi))
+expect_true(tiledb_vfs_is_dir(furi))
 
-ned <- tiledb_fragment_info_get_non_empty_domain_index(fraginf, 0, 0)
-expect_equal(ned, c(1, 10))
-ned <- tiledb_fragment_info_get_non_empty_domain_name(fraginf, 0, "keys")
-expect_equal(ned, c(1, 10))
-ned <- tiledb_fragment_info_get_non_empty_domain_index(fraginf, 0, 0)
+if (tiledb_version(TRUE) < "2.7.0") {
+    ned <- tiledb_fragment_info_get_non_empty_domain_index(fraginf, 0, 0)
+    expect_equal(ned, c(1, 10))
+    ned <- tiledb_fragment_info_get_non_empty_domain_name(fraginf, 0, "keys")
+    expect_equal(ned, c(1, 10))
+    ned <- tiledb_fragment_info_get_non_empty_domain_index(fraginf, 0, 0)
 
-ned <- tiledb_fragment_info_get_non_empty_domain_var_index(fraginf, 0, 1)
-expect_true(is.character(ned))
-expect_equal(length(ned), 2)
+    ned <- tiledb_fragment_info_get_non_empty_domain_var_index(fraginf, 0, 1)
+    expect_true(is.character(ned))
+    expect_equal(length(ned), 2)
+}
 
 expect_equal(tiledb_fragment_info_get_num(fraginf), 1)
 expect_true(tiledb_fragment_info_get_size(fraginf, 0) > 2000) # 2389 on my machine ... but may vary
