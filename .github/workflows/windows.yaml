@@ -1,8 +1,8 @@
+name: windows
+
 on:
   push:
   pull_request:
-
-name: windows
 
 jobs:
   checks:
