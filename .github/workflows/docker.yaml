@@ -12,7 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         include: [
-          { tag: dev, valgrind: '--use-valgrind' },
+          #{ tag: dev, valgrind: '--use-valgrind' },
           { tag: dev },
           { tag: dl },
           #{ tag: 1.7.7 },
@@ -23,8 +23,8 @@ jobs:
           { tag: 2.4.3 },
           { tag: 2.5.4 },
           { tag: 2.6.3 },
-          #{ tag: 2.7.1 },
-          { tag: 2.7.1, valgrind: '--use-valgrind' }
+          { tag: 2.7.1 },
+          #{ tag: 2.7.1, valgrind: '--use-valgrind' }
         ]
     steps:
     - uses: actions/checkout@v2
