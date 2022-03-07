@@ -1,5 +1,3 @@
-Sys.setenv("verbose"="true")
-
 library(tinytest)
 library(tiledb)
 
@@ -37,7 +35,7 @@ J <- sample(c("ABC","DEF","GHI"), N, replace=TRUE)
 
 df <- data.frame(d1=I, d2=J, val=dat)
 arr[] <- df
-expect_equal(arr[]$val, df[,"val"]) #1
+expect_equal(arr[]$val, df[,"val"])
 
 unlink(tmp, recursive = TRUE)
 options(op)
@@ -63,7 +61,7 @@ J <- sample(c("ABC","DEF","GHI"), N, replace=TRUE)
 
 df <- data.frame(d1=I, d2=J, val=dat)
 arr[] <- df
-expect_equal(arr[]$val, df[,"val"]) #2
+expect_equal(arr[]$val, df[,"val"])
 
 unlink(tmp, recursive = TRUE)
 options(op)
@@ -89,7 +87,7 @@ fromDataFrame(dat[,-1], tmpuri)
 
 arr <- tiledb_array(tmpuri, as.data.frame=TRUE)
 newdat <- arr[]
-expect_equal(dat[,-1], newdat[,-1]) #3
+expect_equal(dat[,-1], newdat[,-1])
 
 unlink(tmpuri, recursive = TRUE)
 options(op)
@@ -140,7 +138,7 @@ arr[] <- dat
 
 newarr <- tiledb_array(tmpuri, as.data.frame=TRUE)
 newdat <- newarr[]
-expect_equivalent(dat, newdat) #4
+expect_equivalent(dat, newdat)
 
 unlink(tmpuri, recursive = TRUE)
 options(op)
@@ -169,15 +167,15 @@ dat1 <- arr1[]
 arr2 <- tiledb_array(tmpuri, as.data.frame=TRUE, extended=FALSE)
 dat2 <- arr2[]
 ## dat2 should have fewer as not extended
-expect_true(ncol(dat1) > ncol(dat2)) #5
+expect_true(ncol(dat1) > ncol(dat2))
 
 ## check values
-expect_true(extended(arr1)) #6
-expect_false(extended(arr2)) #7
+expect_true(extended(arr1))
+expect_false(extended(arr2))
 
 ## change value, check again
 extended(arr2) <- TRUE
-expect_true(extended(arr2)) #8
+expect_true(extended(arr2))
 
 ## now dat2 should be equal to dat1
 dat2 <- arr2[]
@@ -187,6 +185,7 @@ expect_equal(dat1, dat2)
 unlink(tmpuri, recursive = TRUE)
 options(op)
 #})
+
 
 #test_that("test attrs column selection on reading", {
 op <- options()
