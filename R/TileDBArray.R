@@ -483,7 +483,7 @@ setMethod("[", "tiledb_array",
   if (missing(i)) i <- NULL
   if (missing(j)) j <- NULL
   k <- NULL
-  verbose <- TRUE #getOption("verbose", FALSE)
+  verbose <- getOption("verbose", "") == "true"
 
   ## deal with possible n-dim indexing
   ndlist <- nd_index_from_syscall(sys.call(), parent.frame())
