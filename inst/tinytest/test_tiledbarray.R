@@ -13,7 +13,8 @@ hasDataTable <- requireNamespace("data.table", quietly=TRUE)
 hasTibble <- requireNamespace("tibble", quietly=TRUE)
 
 ## GitHub Actions had some jobs killed on the larger data portion so we dial mem use down
-if (Sys.getenv("CI") != "") set_allocation_size_preference(1024*1014)
+#if (Sys.getenv("CI") != "")
+set_allocation_size_preference(128*1014)
 
 #test_that("test tiledb_array read/write sparse array with heterogenous date domains", {
 op <- options()
@@ -37,7 +38,7 @@ J <- sample(c("ABC","DEF","GHI"), N, replace=TRUE)
 
 df <- data.frame(d1=I, d2=J, val=dat)
 arr[] <- df
-expect_equal(arr[]$val, df[,"val"])
+expect_equal(arr[]$val, df[,"val"]) #1
 
 unlink(tmp, recursive = TRUE)
 options(op)
@@ -63,7 +64,7 @@ J <- sample(c("ABC","DEF","GHI"), N, replace=TRUE)
 
 df <- data.frame(d1=I, d2=J, val=dat)
 arr[] <- df
-expect_equal(arr[]$val, df[,"val"])
+expect_equal(arr[]$val, df[,"val"]) #2
 
 unlink(tmp, recursive = TRUE)
 options(op)
@@ -89,7 +90,7 @@ fromDataFrame(dat[,-1], tmpuri)
 
 arr <- tiledb_array(tmpuri, as.data.frame=TRUE)
 newdat <- arr[]
-expect_equal(dat[,-1], newdat[,-1])
+expect_equal(dat[,-1], newdat[,-1]) #3
 
 unlink(tmpuri, recursive = TRUE)
 options(op)
@@ -140,7 +141,7 @@ arr[] <- dat
 
 newarr <- tiledb_array(tmpuri, as.data.frame=TRUE)
 newdat <- newarr[]
-expect_equivalent(dat, newdat)
+expect_equivalent(dat, newdat) #4
 
 unlink(tmpuri, recursive = TRUE)
 options(op)
@@ -169,15 +170,15 @@ dat1 <- arr1[]
 arr2 <- tiledb_array(tmpuri, as.data.frame=TRUE, extended=FALSE)
 dat2 <- arr2[]
 ## dat2 should have fewer as not extended
-expect_true(ncol(dat1) > ncol(dat2))
+expect_true(ncol(dat1) > ncol(dat2)) #5
 
 ## check values
-expect_true(extended(arr1))
-expect_false(extended(arr2))
+expect_true(extended(arr1)) #6
+expect_false(extended(arr2)) #7
 
 ## change value, check again
 extended(arr2) <- TRUE
-expect_true(extended(arr2))
+expect_true(extended(arr2)) #8
 
 ## now dat2 should be equal to dat1
 dat2 <- arr2[]
