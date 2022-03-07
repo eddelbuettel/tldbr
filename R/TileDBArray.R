@@ -483,7 +483,7 @@ setMethod("[", "tiledb_array",
   if (missing(i)) i <- NULL
   if (missing(j)) j <- NULL
   k <- NULL
-  #verbose <- getOption("verbose", FALSE)
+  verbose <- TRUE #getOption("verbose", FALSE)
 
   ## deal with possible n-dim indexing
   ndlist <- nd_index_from_syscall(sys.call(), parent.frame())
@@ -544,7 +544,7 @@ setMethod("[", "tiledb_array",
   ## A preference can be set in a local per-user configuration file; if no value
   ## is set a fallback from the TileDB config object is used.
   memory_budget <- get_allocation_size_preference()
-  #if (verbose) message("Memory budget set to ", memory_budget, " bytes or ", memory_budget/8, " rows")
+  if (verbose) message("Memory budget set to ", memory_budget, " bytes or ", memory_budget/8, " rows")
 
   if (length(enckey) > 0) {
     if (length(tstamp) > 0) {
@@ -723,7 +723,7 @@ setMethod("[", "tiledb_array",
       getBuffer <- function(name, type, varnum, nullable, resrv, qryptr, arrptr) {
           if (is.na(varnum)) {
               if (type %in% c("CHAR", "ASCII", "UTF8")) {
-                  #if (verbose) message("Allocating with ", resrv, " and ", memory_budget)
+                  if (verbose) message("Allocating with ", resrv, " and ", memory_budget)
                   buf <- libtiledb_query_buffer_var_char_alloc_direct(resrv, memory_budget, nullable)
                   qryptr <- libtiledb_query_set_buffer_var_char(qryptr, name, buf)
                   buf
@@ -731,7 +731,7 @@ setMethod("[", "tiledb_array",
                   message("Non-char var.num columns are not currently supported.")
               }
           } else {
-              #if (verbose) message("Allocating with ", resrv, " and ", memory_budget)
+              if (verbose) message("Allocating with ", resrv, " and ", memory_budget)
               buf <- libtiledb_query_buffer_alloc_ptr(arrptr, type, resrv, nullable)
               qryptr <- libtiledb_query_set_buffer_ptr(qryptr, name, buf)
               buf
@@ -778,11 +778,11 @@ setMethod("[", "tiledb_array",
           } else {
               resrv <- resrv/8                  # character case where bytesize of offset vector was used
           }
-          #if (verbose) message("Expected size ", resrv)
+          if (verbose) message("Expected size ", resrv)
           ## Permit one pass to allow zero-row schema read
           if (resrv == 0 && counter > 1L) {
               finished <- TRUE
-              #if (verbose) message("Breaking loop at zero length expected")
+              if (verbose) message("Breaking loop at zero length expected")
               break
           }
           ## get results
@@ -806,7 +806,7 @@ setMethod("[", "tiledb_array",
           ## convert list into data.frame (cheaply) and subset
           res <- data.frame(reslist)[seq_len(resrv),,drop=FALSE]
           colnames(res) <- allnames
-          #if (verbose) cat("Retrieved ", paste(dim(res), collapse="x"), "...\n")
+          if (verbose) cat("Retrieved ", paste(dim(res), collapse="x"), "...\n")
           overallresults[[counter]] <- res
           counter <- counter + 1L
       }
