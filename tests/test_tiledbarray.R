@@ -1,9 +1,9 @@
 library(tinytest)
 library(tiledb)
 
-#isOldWindows <- Sys.info()[["sysname"]] == "Windows" && grepl('Windows Server 2008', osVersion)
-#if (isOldWindows) exit_file("skip this file on old Windows releases")
-#isMacOS <- (Sys.info()['sysname'] == "Darwin")
+isOldWindows <- Sys.info()[["sysname"]] == "Windows" && grepl('Windows Server 2008', osVersion)
+if (isOldWindows) exit_file("skip this file on old Windows releases")
+isMacOS <- (Sys.info()['sysname'] == "Darwin")
 
 ctx <- tiledb_ctx(limitTileDBCores())
 
@@ -188,7 +188,7 @@ options(op)
 
 exit_file("Skip here")  # ===============================================================
 
-test_that("test attrs column selection on reading", {
+#test_that("test attrs column selection on reading", {
 op <- options()
 options(stringsAsFactors=FALSE)       # accomodate R 3.*
 
