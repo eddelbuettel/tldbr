@@ -1,12 +1,10 @@
-<!--
-%\VignetteIndexEntry{Data Ingestion from SQL}
-%\VignetteEngine{simplermarkdown::mdweave_to_html}
-%\VignetteEncoding{UTF-8}
--->
 ---
 title: "Date Ingestion from SQL: A Commented Example"
 date: "2022-01-25"
-css: "water.css"
+vignette: |
+  %\VignetteIndexEntry{Data Ingestion from SQL}
+  %\VignetteEngine{simplermarkdown::mdweave_to_html}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ## Introduction
