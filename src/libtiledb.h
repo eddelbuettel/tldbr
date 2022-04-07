@@ -119,7 +119,7 @@ template <typename T> XPtr<T> make_xptr(T* p) {
 }
 
 template <typename T> XPtr<T> make_xptr(SEXP p) {
-    return XPtr<T>(p);         // the default XPtr ctor with deleter on and tag and prot nil
+    return XPtr<T>(p); 	// the default XPtr ctor with deleter on and tag and prot nil
 }
 
 template<typename T> void check_xptr_tag(XPtr<T> ptr) {
