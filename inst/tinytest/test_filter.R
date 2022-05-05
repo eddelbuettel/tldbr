@@ -4,6 +4,9 @@ library(tiledb)
 isOldWindows <- Sys.info()[["sysname"]] == "Windows" && grepl('Windows Server 2008', osVersion)
 if (isOldWindows) exit_file("skip this file on old Windows releases")
 
+## GitHub Actions had some jobs killed on the larger data portion so we dial mem use down
+if (Sys.getenv("CI") != "") set_allocation_size_preference(1024*1014)
+
 ctx <- tiledb_ctx(limitTileDBCores())
 
 #test_that("tiledb_filter default constructor", {
