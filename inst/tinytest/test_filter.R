@@ -77,6 +77,8 @@ tiledb_filter_set_option(flt, "POSITIVE_DELTA_MAX_WINDOW", 10)
 expect_equal(tiledb_filter_get_option(flt, "POSITIVE_DELTA_MAX_WINDOW"), 10)
 #})
 
+if (Sys.getenv("CI") != "") exit_file("Skip this")
+
 ## add some bulk checking for filters
 name_list <- c("NONE",
                "GZIP",
