@@ -18,6 +18,8 @@ dir.create(tmp <- tempfile())
 library(nycflights13)
 
 set_allocation_size_preference(1e8)
+if (Sys.getenv("CI") != "") set_allocation_size_preference(1024*1014)
+
 dom <- tiledb_domain(dims = c(tiledb_dim("carrier", NULL, NULL, "ASCII"),
                               tiledb_dim("origin", NULL, NULL, "ASCII"),
                               tiledb_dim("dest", NULL, NULL, "ASCII"),
