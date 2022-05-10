@@ -90,6 +90,7 @@ name_list <- c("NONE",
                "DICTIONARY_ENCODING")
 
 dat <- readRDS(system.file("sampledata", "bankSample.rds", package="tiledb"))
+if (Sys.getenv("CI") != "") dat <- dat[1:1000,]
 
 vfs <- tiledb_vfs()                     # use an explicit VFS instance for the ops in loop over filters
 for (name in name_list) {
