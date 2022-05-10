@@ -4,6 +4,9 @@ library(tiledb)
 isOldWindows <- Sys.info()[["sysname"]] == "Windows" && grepl('Windows Server 2008', osVersion)
 if (isOldWindows) exit_file("skip this file on old Windows releases")
 
+## GitHub Actions had some jobs killed on the larger data portion so we dial mem use down
+if (Sys.getenv("CI") != "") set_allocation_size_preference(1024*1014)
+
 ctx <- tiledb_ctx(limitTileDBCores())
 
 #test_that("tiledb_filter default constructor", {
@@ -74,6 +77,7 @@ tiledb_filter_set_option(flt, "POSITIVE_DELTA_MAX_WINDOW", 10)
 expect_equal(tiledb_filter_get_option(flt, "POSITIVE_DELTA_MAX_WINDOW"), 10)
 #})
 
+
 ## add some bulk checking for filters
 name_list <- c("NONE",
                "GZIP",
@@ -90,7 +94,7 @@ name_list <- c("NONE",
                "DICTIONARY_ENCODING")
 
 dat <- readRDS(system.file("sampledata", "bankSample.rds", package="tiledb"))
-if (Sys.getenv("CI") != "") dat <- dat[1:500,]
+if (Sys.getenv("CI") != "") dat <- dat[1:250,]
 
 vfs <- tiledb_vfs()                     # use an explicit VFS instance for the ops in loop over filters
 for (name in name_list) {
@@ -107,7 +111,8 @@ for (name in name_list) {
     chk <- tiledb_array(uri, return_as="data.frame")[]
     expect_equal(dat2, chk[, -1])
 
-    if (is.na(match(name, c("NONE", "BITSHUFFLE", "BYTESHUFFLE", "CHECKSUM_MD5", "CHECKSUM_SHA256")))) {
+    if (is.na(match(name, c("NONE", "BITSHUFFLE", "BYTESHUFFLE",
+                            "CHECKSUM_MD5", "CHECKSUM_SHA256", "RLE")))) {
         size_none <- tiledb_vfs_dir_size(file.path(basepath, "NONE"), vfs)
         expect_true(size_none > 0)
         size_curr <- tiledb_vfs_dir_size(uri, vfs)
