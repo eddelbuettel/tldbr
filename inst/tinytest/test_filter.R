@@ -117,8 +117,8 @@ for (name in name_list) {
         expect_true(size_none > 0)
         size_curr <- tiledb_vfs_dir_size(uri, vfs)
         expect_true(size_curr > 0)
-        ##expect_true(size_curr < size_none)
-        message(name, " ", size_none, " ", size_curr, " ", size_curr < size_none)
+        expect_true(size_curr < size_none)
+        #message(name, " ", size_none, " ", size_curr, " ", size_curr < size_none)
     }
 }
 rm(vfs)
