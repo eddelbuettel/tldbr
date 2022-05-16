@@ -4,9 +4,6 @@ library(tiledb)
 isOldWindows <- Sys.info()[["sysname"]] == "Windows" && grepl('Windows Server 2008', osVersion)
 if (isOldWindows) exit_file("skip this file on old Windows releases")
 
-## GitHub Actions had some jobs killed on the larger data portion so we dial mem use down
-if (Sys.getenv("CI") != "") set_allocation_size_preference(1024*1014)
-
 ctx <- tiledb_ctx(limitTileDBCores())
 
 #test_that("tiledb_filter default constructor", {
@@ -85,7 +82,7 @@ name_list <- c("NONE",
                "LZ4",
                "RLE",
                "BZIP2",
-               "DOUBLE_DELTA",
+               #"DOUBLE_DELTA",			# cannot be used with floating point data
                "BIT_WIDTH_REDUCTION",
                "BITSHUFFLE",
                "BYTESHUFFLE",
@@ -107,9 +104,6 @@ for (name in name_list) {
     basepath <- file.path(tempdir())
     uri <- file.path(basepath, name)
     fromDataFrame(dat2, uri, filter=name)
-
-    chk <- tiledb_array(uri, return_as="data.frame")[]
-    expect_equal(dat2, chk[, -1])
 
     if (is.na(match(name, c("NONE", "BITSHUFFLE", "BYTESHUFFLE",
                             "CHECKSUM_MD5", "CHECKSUM_SHA256", "RLE")))) {
