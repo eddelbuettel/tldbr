@@ -93,8 +93,8 @@ name_list <- c("NONE",
                "CHECKSUM_SHA256",
                "DICTIONARY_ENCODING")
 
-dat <- readRDS(system.file("sampledata", "bankSample.rds", package="tiledb"))
-if (Sys.getenv("CI") != "") dat <- dat[1:250,]
+if (!requireNamespace("palmerpenguins", quietly=TRUE)) exit_file("remainder needs 'palmerpenguins'")
+dat <- palmerpenguins::penguins
 
 vfs <- tiledb_vfs()                     # use an explicit VFS instance for the ops in loop over filters
 for (name in name_list) {
