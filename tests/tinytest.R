@@ -1,9 +1,14 @@
 
 if (requireNamespace("tinytest", quietly=TRUE))  {
 
-    ## Docker is picky about memory use so we lower the allocated total from the
-    ## package default of 10mb per column to 5mb per columns
-    #if (Sys.getenv("CI", "") != "") tiledb::save_allocation_size_preference(1024*1024*5)
+    ## Set a seed to make the test deterministic
+    set.seed(42)
 
+    ## R makes us to this
+    Sys.setenv("R_TESTS"="")
+
+    ## there are several more granular ways to test files in a tinytest directory,
+    ## see its package vignette; tests can also run once the package is installed
+    ## using the same command `test_package(pkgName)`, or by director or file
     tinytest::test_package("tiledb")
 }
