@@ -26,7 +26,8 @@ jobs:
           { tag: 2.7.2 },
           { tag: 2.8.2 },
           { tag: 2.9.5 },
-          { tag: 2.10.2 }
+          { tag: 2.10.4 },
+          { tag: 2.11.0 }
         ]
     steps:
     - uses: actions/checkout@v2
