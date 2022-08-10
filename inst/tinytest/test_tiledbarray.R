@@ -1044,7 +1044,7 @@ if (tiledb_version(TRUE) >= "2.10.0") {
     expect_equal(nrow(A[]), 3)
     A <- tiledb_array(uri = tmp, as.data.frame=TRUE, timestamp_end=now2 + onet)
     expect_equal(nrow(A[]), 6)
-} else {
+} else if (tiledb_version(TRUE) >= "2.8.0") {
     A <- tiledb_array(uri = tmp, as.data.frame=TRUE, timestamp=now1 - onet)
     expect_equal(nrow(A[]), 0)
     A <- tiledb_array(uri = tmp, as.data.frame=TRUE, timestamp=now1 + onet)
