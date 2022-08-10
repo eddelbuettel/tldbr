@@ -1942,8 +1942,12 @@ XPtr<tiledb::Array> libtiledb_array_open_at(XPtr<tiledb::Context> ctx, std::stri
     auto query_type = _string_to_tiledb_query_type(type);
     // get timestamp as seconds since epoch (plus fractional seconds, returns double), scale to millisec
     uint64_t ts_ms = static_cast<uint64_t>(std::round(tstamp.getFractionalTimestamp() * 1000));
+#if TILEDB_VERSION >= TileDB_Version(2,3,0)
     auto ptr = new tiledb::Array(*ctx.get(), uri, query_type);
     ptr->set_open_timestamp_end(ts_ms);
+#else
+    auto ptr = new tiledb::Array(*ctx.get(), uri, query_type, ts_ms);
+#endif
     return make_xptr<tiledb::Array>(ptr);
 }
 
@@ -1973,8 +1977,12 @@ XPtr<tiledb::Array> libtiledb_array_open_at_with_key(XPtr<tiledb::Context> ctx, 
     (*cfg)["sm.encryption_type"] = "AES_256_GCM";
     (*cfg)["sm.encryption_key"] = enc_key;
     XPtr<tiledb::Context> newctx = libtiledb_ctx(cfg);
+#if TILEDB_VERSION >= TileDB_Version(2,3,0)
     auto p = new tiledb::Array(*newctx.get(), uri, query_type);
     p->set_open_timestamp_start(ts_ms);
+#else
+    auto p = new tiledb::Array(*ctx.get(), uri, query_type, ts_ms);
+#endif
     return make_xptr<tiledb::Array>(p);
 }
 
