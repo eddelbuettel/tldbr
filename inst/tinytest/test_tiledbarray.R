@@ -1033,14 +1033,25 @@ data <- c(11L, 22L, 33L)
 A <- tiledb_array(uri = tmp, timestamp_end=now2)
 A[I, J] <- data
 
-A <- tiledb_array(uri = tmp, as.data.frame=TRUE, timestamp_end=now1 - onet)
-expect_equal(nrow(A[]), 0)
-A <- tiledb_array(uri = tmp, as.data.frame=TRUE, timestamp_end=now1 + onet)
-expect_equal(nrow(A[]), 3)
-A <- tiledb_array(uri = tmp, as.data.frame=TRUE, timestamp_end=now2 - onet)
-expect_equal(nrow(A[]), 3)
-A <- tiledb_array(uri = tmp, as.data.frame=TRUE, timestamp_end=now2 + onet)
-expect_equal(nrow(A[]), 6)
+if (tiledb_version(TRUE) > "2.3.0") {
+    A <- tiledb_array(uri = tmp, as.data.frame=TRUE, timestamp_end=now1 - onet)
+    expect_equal(nrow(A[]), 0)
+    A <- tiledb_array(uri = tmp, as.data.frame=TRUE, timestamp_end=now1 + onet)
+    expect_equal(nrow(A[]), 3)
+    A <- tiledb_array(uri = tmp, as.data.frame=TRUE, timestamp_end=now2 - onet)
+    expect_equal(nrow(A[]), 3)
+    A <- tiledb_array(uri = tmp, as.data.frame=TRUE, timestamp_end=now2 + onet)
+    expect_equal(nrow(A[]), 6)
+} else {
+    A <- tiledb_array(uri = tmp, as.data.frame=TRUE, timestamp=now1 - onet)
+    expect_equal(nrow(A[]), 0)
+    A <- tiledb_array(uri = tmp, as.data.frame=TRUE, timestamp=now1 + onet)
+    expect_equal(nrow(A[]), 3)
+    A <- tiledb_array(uri = tmp, as.data.frame=TRUE, timestamp=now2 - onet)
+    expect_equal(nrow(A[]), 3)
+    A <- tiledb_array(uri = tmp, as.data.frame=TRUE, timestamp=now2 + onet)
+    expect_equal(nrow(A[]), 6)
+}
 
 ## as.matrix
 tmp <- tempfile()
