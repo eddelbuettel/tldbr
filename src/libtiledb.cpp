@@ -3514,23 +3514,32 @@ NumericVector libtiledb_query_get_est_result_size_var_nullable(XPtr<tiledb::Quer
 // [[Rcpp::export]]
 double libtiledb_query_get_range_num(XPtr<tiledb::Query> query, int dim_idx) {
   check_xptr_tag<tiledb::Query>(query);
+#if TILEDB_VERSION >= TileDB_Version(2,7,0)
   tiledb::Array arr = query->array();
   tiledb::Context ctx = query->ctx();
   tiledb::Subarray sub(ctx, arr);
   query->update_subarray_from_query(&sub);
   uint64_t range_num = sub.range_num(static_cast<unsigned int>(dim_idx));
+#else
+  uint64_t range_num = query->range_num(static_cast<unsigned int>(dim_idx));
+#endif
   return static_cast<double>(range_num);
 }
 
 // [[Rcpp::export]]
 IntegerVector libtiledb_query_get_range(XPtr<tiledb::Query> query, int dim_idx, int rng_idx) {
   check_xptr_tag<tiledb::Query>(query);
+#if TILEDB_VERSION >= TileDB_Version(2,7,0)
   tiledb::Array arr = query->array();
   tiledb::Context ctx = query->ctx();
   tiledb::Subarray sub(ctx, arr);
   query->update_subarray_from_query(&sub);
   std::array<int32_t, 3> rng = sub.range<int32_t>(static_cast<unsigned int>(dim_idx),
                                                   static_cast<unsigned int>(rng_idx));
+#else
+  std::array<int32_t, 3> rng = query->range<int32_t>(static_cast<unsigned int>(dim_idx),
+                                                     static_cast<unsigned int>(rng_idx));
+#endif
   return IntegerVector::create(rng[0], 	// start
                                rng[1],  // end
                                rng[2]); // stride
@@ -3539,11 +3548,15 @@ IntegerVector libtiledb_query_get_range(XPtr<tiledb::Query> query, int dim_idx, 
 // [[Rcpp::export]]
 CharacterVector libtiledb_query_get_range_var(XPtr<tiledb::Query> query, int dim_idx, int rng_idx) {
   check_xptr_tag<tiledb::Query>(query);
+#if TILEDB_VERSION >= TileDB_Version(2,7,0)
   tiledb::Array arr = query->array();
   tiledb::Context ctx = query->ctx();
   tiledb::Subarray sub(ctx, arr);
   query->update_subarray_from_query(&sub);
   std::array<std::string, 2> rng = sub.range(static_cast<unsigned int>(dim_idx), static_cast<uint64_t>(rng_idx));
+#else
+  std::array<std::string, 2> rng = query->range(static_cast<unsigned int>(dim_idx), static_cast<uint64_t>(rng_idx));
+#endif
   return CharacterVector::create(rng[0], rng[1]);	 // start and end
 }
 
