@@ -940,6 +940,8 @@ if (requireNamespace("bit64", quietly=TRUE)) {
   unlink(tmp, recursive = TRUE)
 }
 
+if (tiledb_version(TRUE) >= "2.8.0" && tiledb_version(TRUE) < "2.10.0") exit_file("2.8.* and 2.9.* skip remainder")
+
 ## FYI: 101 tests here
 ## test encrypted arrays via high-level accessor
 ## (lower-level tests in test_densearray and test_arrayschema)
@@ -1033,7 +1035,7 @@ data <- c(11L, 22L, 33L)
 A <- tiledb_array(uri = tmp, timestamp_end=now2)
 A[I, J] <- data
 
-if (tiledb_version(TRUE) > "2.3.0") {
+if (tiledb_version(TRUE) >= "2.10.0") {
     A <- tiledb_array(uri = tmp, as.data.frame=TRUE, timestamp_end=now1 - onet)
     expect_equal(nrow(A[]), 0)
     A <- tiledb_array(uri = tmp, as.data.frame=TRUE, timestamp_end=now1 + onet)
