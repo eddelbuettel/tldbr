@@ -945,7 +945,7 @@ if (tiledb_version(TRUE) >= "2.8.0" && tiledb_version(TRUE) < "2.10.0") exit_fil
 ## FYI: 101 tests here
 ## test encrypted arrays via high-level accessor
 ## (lower-level tests in test_densearray and test_arrayschema)
-if (tiledb_version(TRUE) > "2.5.0") {
+#if (tiledb_version(TRUE) > "2.5.0") {
     tmp <- tempfile()
     dir.create(tmp)
     encryption_key <- "0123456789abcdeF0123456789abcdeF"
@@ -972,7 +972,7 @@ if (tiledb_version(TRUE) > "2.5.0") {
     expect_equal(chk[,"a"], c(3L,2L))
 
     unlink(tmp, recursive = TRUE)
-}
+#}
 
 ## FYI: 105 tests here
 ## non-empty domain, var and plain
