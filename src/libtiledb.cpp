@@ -1926,8 +1926,9 @@ std::string libtiledb_array_create(std::string uri, XPtr<tiledb::ArraySchema> sc
 std::string libtiledb_array_create_with_key(std::string uri, XPtr<tiledb::ArraySchema> schema,
                                             std::string encryption_key) {
     check_xptr_tag<tiledb::ArraySchema>(schema);
-    tiledb::Array::create(uri, *schema.get(), TILEDB_AES_256_GCM,
-                          encryption_key.c_str(), encryption_key.size());
+    tiledb::Array::create(uri, *schema.get(),
+                          _string_to_tiledb_encryption_type_t("AES_256_GCM"),
+                          encryption_key);
     return uri;
 }
 
@@ -1976,8 +1977,6 @@ XPtr<tiledb::Array> libtiledb_array_open_at_with_key(XPtr<tiledb::Context> ctx, 
     return make_xptr<tiledb::Array>(new tiledb::Array(*ctx.get(), uri, query_type,
                                                       TILEDB_AES_256_GCM, enc_key.data(),
                                                       (uint32_t)enc_key.size(), ts_ms));
-    auto p = new tiledb::Array(*ctx.get(), uri, query_type, ts_ms);
-    return make_xptr<tiledb::Array>(p);
 }
 
 // [[Rcpp::export]]
