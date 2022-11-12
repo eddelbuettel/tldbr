@@ -2,6 +2,25 @@
 
 ## Improvements
 
+* Support for testing group URIs on being relative has been added (#478)
+
+* Logging support at the R and C++ level has been added (#479)
+
+* Use of TileDB Embedded was upgraded to release 2.12.1, and 2.12.2 (#480, #481)
+
+## Bug Fixes
+
+* Accomodate possible zero sized allocation estimates for attributes (#482)
+
+## Build and Test Systems
+
+* Update check-out action to version three suppressing a warning (#477)
+
+
+# tiledb 0.16.0
+
+## Improvements
+
 * Several deprecated API entry points of TileDB Embedded are no longer used (#452, #453)
 
 * Support for DELETE queries has been added (requires TileDB Embedded 2.12.0 or later) (#455, #456)
@@ -35,6 +54,8 @@
 * A parameterized test for the SCALE_FLOAT filter has been added (#469)
 
 * The test setup ensures that the per-session directory remains accessible (#470)
+
+* Continuous integration testing for Linux and macOS has been moved to GitHub Actions (#471)
 
 
 # tiledb 0.15.0

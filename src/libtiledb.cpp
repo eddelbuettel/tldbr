@@ -2647,16 +2647,16 @@ XPtr<tiledb::Query> libtiledb_query_set_buffer(XPtr<tiledb::Query> query,
 // -- vlc_buf_t functions below
 
 // [[Rcpp::export]]
-XPtr<vlc_buf_t> libtiledb_query_buffer_var_char_alloc_direct(int szoffsets, int szdata,
+XPtr<vlc_buf_t> libtiledb_query_buffer_var_char_alloc_direct(double szoffsets, double szdata,
                                                              bool nullable, int cols=1) {
-  XPtr<vlc_buf_t> buf = make_xptr<vlc_buf_t>(new vlc_buf_t);
-  buf->offsets.resize(szoffsets);
-  buf->str.resize(szdata);
-  buf->rows = szoffsets/cols;           // guess for number of elements
-  buf->cols = cols;
-  buf->nullable = nullable;
-  buf->validity_map.resize(szdata);
-  return buf;
+    XPtr<vlc_buf_t> buf = make_xptr<vlc_buf_t>(new vlc_buf_t);
+    buf->offsets.resize(static_cast<size_t>(szoffsets));
+    buf->str.resize(static_cast<size_t>(szdata));
+    buf->rows = std::round(szoffsets/cols);           // guess for number of elements
+    buf->cols = cols;
+    buf->nullable = nullable;
+    buf->validity_map.resize(static_cast<size_t>(szdata));
+    return buf;
 }
 
 // assigning (for a write) allocates
@@ -3215,6 +3215,7 @@ RObject libtiledb_query_get_buffer_ptr(XPtr<query_buf_t> buf, bool asint64 = fal
 // [[Rcpp::export]]
 XPtr<tiledb::Query> libtiledb_query_submit(XPtr<tiledb::Query> query) {
   check_xptr_tag<tiledb::Query>(query);
+  spdl::trace("[libtiledb_query_submit]");
   query->submit();
   return query;
 }
@@ -3222,6 +3223,7 @@ XPtr<tiledb::Query> libtiledb_query_submit(XPtr<tiledb::Query> query) {
 // [[Rcpp::export]]
 XPtr<tiledb::Query> libtiledb_query_submit_async(XPtr<tiledb::Query> query) {
   check_xptr_tag<tiledb::Query>(query);
+  spdl::trace("[libtiledb_query_submit_async]");
   query->submit_async();
   return query;
 }
@@ -3229,6 +3231,7 @@ XPtr<tiledb::Query> libtiledb_query_submit_async(XPtr<tiledb::Query> query) {
 // [[Rcpp::export]]
 XPtr<tiledb::Query> libtiledb_query_finalize(XPtr<tiledb::Query> query) {
   check_xptr_tag<tiledb::Query>(query);
+  spdl::trace("[libtiledb_query_finalize]");
   query->finalize();
   return query;
 }
@@ -3254,7 +3257,9 @@ std::string _query_status_to_string(tiledb::Query::Status status) {
 std::string libtiledb_query_status(XPtr<tiledb::Query> query) {
   check_xptr_tag<tiledb::Query>(query);
   tiledb::Query::Status status = query->query_status();
-  return _query_status_to_string(status);
+  std::string status_text = _query_status_to_string(status);
+  spdl::debug(tfm::format("[libtiledb_query_status] status = %s", status_text.c_str()));
+  return status_text;
 }
 
 // [[Rcpp::export]]
@@ -4783,6 +4788,17 @@ std::string libtiledb_group_dump(XPtr<tiledb::Group> grp, bool recursive) {
     return std::string("");
 #endif
 }
+
+// [[Rcpp::export]]
+bool libtiledb_group_is_relative(XPtr<tiledb::Group> grp, const std::string &name) {
+    check_xptr_tag<tiledb::Group>(grp);
+#if TILEDB_VERSION >= TileDB_Version(2,12,0)
+    return grp->is_relative(name);
+#else
+    return false;
+#endif
+}
+
 
 
 /**

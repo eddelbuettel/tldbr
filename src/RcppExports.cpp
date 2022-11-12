@@ -1618,13 +1618,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // libtiledb_query_buffer_var_char_alloc_direct
-XPtr<vlc_buf_t> libtiledb_query_buffer_var_char_alloc_direct(int szoffsets, int szdata, bool nullable, int cols);
+XPtr<vlc_buf_t> libtiledb_query_buffer_var_char_alloc_direct(double szoffsets, double szdata, bool nullable, int cols);
 RcppExport SEXP _tiledb_libtiledb_query_buffer_var_char_alloc_direct(SEXP szoffsetsSEXP, SEXP szdataSEXP, SEXP nullableSEXP, SEXP colsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< int >::type szoffsets(szoffsetsSEXP);
-    Rcpp::traits::input_parameter< int >::type szdata(szdataSEXP);
+    Rcpp::traits::input_parameter< double >::type szoffsets(szoffsetsSEXP);
+    Rcpp::traits::input_parameter< double >::type szdata(szdataSEXP);
     Rcpp::traits::input_parameter< bool >::type nullable(nullableSEXP);
     Rcpp::traits::input_parameter< int >::type cols(colsSEXP);
     rcpp_result_gen = Rcpp::wrap(libtiledb_query_buffer_var_char_alloc_direct(szoffsets, szdata, nullable, cols));
@@ -2977,6 +2977,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// libtiledb_group_is_relative
+bool libtiledb_group_is_relative(XPtr<tiledb::Group> grp, const std::string& name);
+RcppExport SEXP _tiledb_libtiledb_group_is_relative(SEXP grpSEXP, SEXP nameSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< XPtr<tiledb::Group> >::type grp(grpSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type name(nameSEXP);
+    rcpp_result_gen = Rcpp::wrap(libtiledb_group_is_relative(grp, name));
+    return rcpp_result_gen;
+END_RCPP
+}
 // libtiledb_filestore_schema_create
 XPtr<tiledb::ArraySchema> libtiledb_filestore_schema_create(XPtr<tiledb::Context> ctx, std::string uri);
 RcppExport SEXP _tiledb_libtiledb_filestore_schema_create(SEXP ctxSEXP, SEXP uriSEXP) {
@@ -3381,6 +3393,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_tiledb_libtiledb_group_member_count", (DL_FUNC) &_tiledb_libtiledb_group_member_count, 1},
     {"_tiledb_libtiledb_group_member", (DL_FUNC) &_tiledb_libtiledb_group_member, 2},
     {"_tiledb_libtiledb_group_dump", (DL_FUNC) &_tiledb_libtiledb_group_dump, 2},
+    {"_tiledb_libtiledb_group_is_relative", (DL_FUNC) &_tiledb_libtiledb_group_is_relative, 2},
     {"_tiledb_libtiledb_filestore_schema_create", (DL_FUNC) &_tiledb_libtiledb_filestore_schema_create, 2},
     {"_tiledb_libtiledb_filestore_uri_import", (DL_FUNC) &_tiledb_libtiledb_filestore_uri_import, 3},
     {"_tiledb_libtiledb_filestore_uri_export", (DL_FUNC) &_tiledb_libtiledb_filestore_uri_export, 3},
