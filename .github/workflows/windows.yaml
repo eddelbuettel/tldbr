@@ -24,7 +24,6 @@ jobs:
           r-version: ${{ matrix.r }}
       - name: Install dependencies
         run: |
-          setRepositories(ind = 1:2)
           install.packages(c("remotes", "rcmdcheck"))
           remotes::install_deps(dependencies = TRUE)
         shell: Rscript {0}
