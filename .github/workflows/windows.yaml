@@ -1,10 +1,9 @@
-name: windows
-
 on:
-  #push:
-  #pull_request:
-  # -- ie never
+  push:
+  pull_request:
   release:
+
+name: windows
 
 jobs:
   checks:
@@ -12,7 +11,7 @@ jobs:
     runs-on: windows-latest
     steps:
       - run: git config --global core.autocrlf false
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: r-lib/actions/setup-r@master
       - uses: r-lib/actions/setup-pandoc@master
       - name: Install dependencies
@@ -26,5 +25,5 @@ jobs:
       - name: Check
         env:
           _R_CHECK_CRAN_INCOMING_: false
-        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--as-cran"), check_dir = "check")
+        run: rcmdcheck::rcmdcheck(args = c("--no-manual", "--no-vignettes", "--as-cran"), build_args = c("--no-build-vignettes"), error_on = "error", check_dir = "check")
         shell: Rscript {0}
