@@ -157,8 +157,8 @@ expect_equal(unique(dat$origin), c("JFK", "LGA"))
 expect_equal(unique(dat$dest), "BOS")
 
 ## use both
-selected_points(newarr) <- list(dest = "BOS")
-selected_ranges(newarr) <- list(origin = cbind("JFK", "LGA"))
-dat <- newarr[]
-expect_equal(unique(dat$origin), c("JFK", "LGA"))
-expect_equal(unique(dat$dest), "BOS")
+#selected_points(newarr) <- list(dest = "BOS")
+#selected_ranges(newarr) <- list(origin = cbind("JFK", "LGA"))
+#dat <- newarr[]
+#expect_equal(unique(dat$origin), c("JFK", "LGA"))
+#expect_equal(unique(dat$dest), "BOS")
