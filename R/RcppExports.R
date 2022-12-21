@@ -29,14 +29,6 @@ makeQueryWrapper <- function(qp) {
     .Call(`_tiledb_makeQueryWrapper`, qp)
 }
 
-libtiledb_query_set_coordinates <- function(query, coords, dtype) {
-    .Call(`_tiledb_libtiledb_query_set_coordinates`, query, coords, dtype)
-}
-
-libtiledb_coords <- function() {
-    .Call(`_tiledb_libtiledb_coords`)
-}
-
 tiledb_datatype_string_to_sizeof <- function(str) {
     .Call(`_tiledb_tiledb_datatype_string_to_sizeof`, str)
 }
