@@ -6,6 +6,12 @@
 
 * Deprecated Core API functions for Array access and range setting are longer used (#496)
 
+* TileDB Group objects now have a default `show()` method (#498, #499)
+
+* Domain and tile sizes for int64 dimension objects are now internally converted (#500)
+
+* Use of TileDB Embedded was upgraded to release 2.13.1 (#501)
+
 ## Bug Fixes
 
 * Fragment info domain getters now work with ASCII domains (#495)
@@ -21,6 +27,11 @@
 * Functions `libtiledb_query_add_range{,_with_type}` relying on depecreated Core
   functionality are deprecated, and will be removed with the Core functions.
   Subarray range setters are available. This is a mostly internal change.
+
+## Removals
+
+* Functions `libtiledb_query_set_coordinates()` and `libtiledb_coords()`
+  which have been deprecated since June 2000 have been removed. (#497)
 
 
 # tiledb 0.17.0
