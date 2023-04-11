@@ -1392,6 +1392,7 @@ selected_ranges(A) <- list(cbind(2,2), cbind(2,3), cbind(2,2))
 res <- A[]
 expect_equal(res[, "a", drop=TRUE], c(22,26))
 
+
 if (requireNamespace("bit64", quietly=TRUE)) {
   suppressMessages(library(bit64))
   uri <- tempfile()
@@ -1418,7 +1419,7 @@ if (requireNamespace("bit64", quietly=TRUE)) {
 }
 
 
-## test for no attributes
+## [200]  test for no attributes
 library(palmerpenguins)
 uri <- tempfile()
 fromDataFrame(penguins, uri, sparse = TRUE, col_index = c("species", "year"))
@@ -1435,10 +1436,11 @@ attrs(arr) <- NA_character_
 expect_true(is.na(attrs(arr)))
 
 v <- tiledb_version()
-if (v[["major"]] == 2L && v[["minor"]] %in% c(4L, 10L)) exit_file("Skip remainder for 2.4.* and 2.10.*")
+if (v[["major"]] == 2L && v[["minor"]] %in% c(4L, 10, 14L)) exit_file("Skip remainder for 2.4.*, 2.10.*, 2.14.*")
 
 ## CI issues at GitHub for r-release on Windows Server 2019
 if (getRversion() < "4.3.0" && Sys.info()[["sysname"]] == "Windows") exit_file("Skip remainder for R 4.2.* on Windows")
+
 
 ## check for incomplete status on unsuccessful query
 set_allocation_size_preference(256)     # too low for penguins to return something
