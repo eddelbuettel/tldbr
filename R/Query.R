@@ -148,12 +148,13 @@ tiledb_query_create_buffer_ptr_char <- function(query, varvec) {
 #'
 #' @param sizeoffsets A numeric value with the size of the offsets vector
 #' @param sizedata A numeric value of the size of the data string
+#' @param nullable An optional boolean indicating whether the column can have NULLs
 #' @return An external pointer to the allocated buffer object
 #' @export
-tiledb_query_alloc_buffer_ptr_char <- function(sizeoffsets, sizedata) {
+tiledb_query_alloc_buffer_ptr_char <- function(sizeoffsets, sizedata, nullable=FALSE) {
   stopifnot(`Argument 'sizeoffset' must be numeric` = is.numeric(sizeoffsets),
             `Argument 'sizedata' must be numeric` = is.numeric(sizedata))
-  bufptr <- libtiledb_query_buffer_var_char_alloc_direct(sizeoffsets, sizedata)
+  bufptr <- libtiledb_query_buffer_var_char_alloc_direct(sizeoffsets, sizedata, nullable)
   bufptr
 }
 
@@ -198,13 +199,19 @@ tiledb_query_set_buffer_ptr_char <- function(query, attr, bufptr) {
 #' @param query A TileDB Query object
 #' @param datatype A character value containing the data type
 #' @param ncells A number of elements (not bytes)
+#' @param nullable Optional boolean parameter indicating whether missing values
+#' are allowed (for which another column is allocated), default is FALSE
+#' @param varnum Option intgeter parameter for the number of elemements per variable,
+#' default is one
 #' @return An external pointer to the allocated buffer object
 #' @export
-tiledb_query_buffer_alloc_ptr <- function(query, datatype, ncells) {
-  stopifnot(`Argument 'query' must be a tiledb_query object` = is(query, "tiledb_query"),
-            `Argument 'datatype' must be a character object` = is.character(datatype),
-            `Argument 'ncells' must be numeric` = is.numeric(ncells))
-  bufptr <- libtiledb_query_buffer_alloc_ptr(datatype, ncells)
+tiledb_query_buffer_alloc_ptr <- function(query, datatype, ncells, nullable=FALSE, varnum=1) {
+  stopifnot("Argument 'query' must be a tiledb_query object" = is(query, "tiledb_query"),
+            "Argument 'datatype' must be a character object" = is.character(datatype),
+            "Argument 'ncells' must be numeric" = is.numeric(ncells),
+            "Argument 'nullable' must be logical" = is.logical(nullable),
+            "Argument 'varnum' must be integer or numeric" = is.integer(varnum) || is.numeric(varnum))
+  bufptr <- libtiledb_query_buffer_alloc_ptr(datatype, ncells, nullable, varnum)
   bufptr
 }
 
