@@ -6,13 +6,15 @@
 
 * The startup message now displays the operating system and version (#532)
 
-* Use of TileDB Embedded was upgraded to release 2.15.1 (#534)
+* Use of TileDB Embedded was upgraded to release 2.15.1 and 2.15.2 (#534, #541)
 
 * Group objects can be opened while supplying a Config object when 2.15.1 or newer is used (#535, #536)
 
 * For character column buffer allocations, the R function now accepts a `nullable` option (#537)
 
 * For standard buffer allocations, the R function now accepts `nullable` and `varnum` options (#538)
+
+* Query conditions can now be expressed on boolean attributes (#540)
 
 ## Build and Test Systems
 
