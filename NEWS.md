@@ -1,4 +1,17 @@
-# tiledb ongoing development
+# tilebd 0.19.* -- Ongoing development
+
+* This release of the R package builds against [TileDB 2.15.2](https://github.com/TileDB-Inc/TileDB/releases/tag/2.15.2), and has also been tested against earlier releases as well as the development
+  version (#534, #541).
+
+## Improvements
+
+* The startup message is now reformated across two shorter lines (#545)
+
+
+# tiledb 0.19.1
+
+* This release of the R package builds against [TileDB 2.15.2](https://github.com/TileDB-Inc/TileDB/releases/tag/2.15.2), and has also been tested against earlier releases as well as the development
+  version (#534, #541).
 
 ## Improvements
 
@@ -21,6 +34,8 @@
 * Testing for Groups reflect the stricter behavior in config setting requiring a close array (#530)
 
 * The use of binary packages in continuous integration has been made a little more robust (#531)
+
+* A small subset of tests are skipped if testing against the older release 2.14.* (#542)
 
 
 # tiledb 0.19.0
