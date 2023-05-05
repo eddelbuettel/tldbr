@@ -119,10 +119,12 @@ class ArrowAdapter {
             array->buffers[0] = column->validity().data();
         }
 
+#if TILEDB_VERSION >= TileDB_Version(2,10,0)
         /* Workaround to cast TILEDB_BOOL from uint8 to 1-bit Arrow boolean. */
         if (column->type() == TILEDB_BOOL) {
             column->data_to_bitmap();
         }
+#endif
 
         return std::pair(std::move(array), std::move(schema));
     }
@@ -141,8 +143,10 @@ class ArrowAdapter {
             case TILEDB_CHAR:
             case TILEDB_BLOB:
                 return "Z";  // large because TileDB uses 64bit offsets
+#if TILEDB_VERSION >= TileDB_Version(2,10,0)
             case TILEDB_BOOL:
                 return "b";
+#endif
             case TILEDB_INT32:
                 return "i";
             case TILEDB_INT64:
