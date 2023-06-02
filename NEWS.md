@@ -1,7 +1,7 @@
 # tilebd 0.19.* -- Ongoing development
 
-* This release of the R package builds against [TileDB 2.15.2](https://github.com/TileDB-Inc/TileDB/releases/tag/2.15.2), and has also been tested against earlier releases as well as the development
-  version (#534, #541).
+* This release of the R package builds against [TileDB 2.15.3](https://github.com/TileDB-Inc/TileDB/releases/tag/2.15.3), and has also been tested against earlier releases as well as the development
+  version (#551).
 
 ## Improvements
 
@@ -9,9 +9,23 @@
 
 * Support for returning 'Arrow Table' objects has been added (#548)
 
+* Use of TileDB Embedded was upgraded to release 2.15.3 (#551)
+
+* Date columns can now be exported to Arrow as well (#554)
+
 ## Bug Fixes
 
 * Consolidation and vacuum calls now reflect the state of the global context object (#547)
+
+* Pointers to 'Arrow Table' objects representing the table columns are now in external pointers too (#550)
+
+* The documentation for 'Dimensions' was corrected in two spots in its wording / grammar (#552)
+
+## Build and Test Systems
+
+* 'sudo' mode is reenabled for package 'bspm' used in the continuous integration at GitHub Actions (#549)
+
+* Compilation on Linux systems as old as Ubuntu 18.04 without a `filesystem` header is now possible (#556)
 
 
 # tiledb 0.19.1
