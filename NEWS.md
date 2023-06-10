@@ -1,7 +1,7 @@
 # tilebd 0.19.* -- Ongoing development
 
-* This release of the R package builds against [TileDB 2.15.3](https://github.com/TileDB-Inc/TileDB/releases/tag/2.15.3), and has also been tested against earlier releases as well as the development
-  version (#551).
+* This release of the R package builds against [TileDB 2.15.4](https://github.com/TileDB-Inc/TileDB/releases/tag/2.15.4), and has also been tested against earlier releases as well as the development
+  version (#551, #559)
 
 ## Improvements
 
@@ -14,6 +14,8 @@
 * Date columns can now be exported to Arrow as well (#554)
 
 * Array writes which set timestamps now take advantage of the new temporal policy API (#558)
+
+* Displaying a schema is now more readable with additional linebreaks (#560)
 
 ## Bug Fixes
 
