@@ -21,6 +21,8 @@
 
 * Integer64 values can now be written to array metadata (#564)
 
+* Date and POSIXct attributes are now supported in query conditions (#568)
+
 ## Bug Fixes
 
 * Consolidation and vacuum calls now reflect the state of the global context object (#547)
@@ -34,6 +36,10 @@
 * 'sudo' mode is reenabled for package 'bspm' used in the continuous integration at GitHub Actions (#549)
 
 * Compilation on Linux systems as old as Ubuntu 18.04 without a `filesystem` header is now possible (#556)
+
+## Deprecations
+
+* The boolean arguments `as.data.frame`, `as.matrix` and `as.array` to the `tiledb_array()` accessor are deprecated in favor of the more general `return_as="..."` form. (#567)
 
 ## Removals
 

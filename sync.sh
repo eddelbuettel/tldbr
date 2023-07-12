@@ -33,4 +33,5 @@ rsync ${args} \
       --exclude=ex*\.R \
       --exclude=*~ \
       --exclude=local \
+      --exclude=EnumerationsNotes.md \
       ../tiledb-r/ .
