@@ -9,7 +9,7 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     container:
-      image: rocker/r2u:22.04
+      image: rocker/r2u:latest
     steps:
       - uses: actions/checkout@v3
       - name: SessionInfo
