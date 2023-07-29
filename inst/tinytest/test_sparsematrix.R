@@ -6,10 +6,10 @@ if (isOldWindows) exit_file("skip this file on old Windows releases")
 
 ctx <- tiledb_ctx(limitTileDBCores())
 
+if (tiledb_version(TRUE) < "2.7.0") exit_file("Needs TileDB 2.7.* or later")
 if (!requireNamespace("Matrix", quietly=TRUE)) exit_file("Need the 'Matrix' package")
 library(Matrix)
 if (packageVersion("Matrix") < "1.3.0") exit_file("Old 'Matrix' package?")
-if (tiledb_version(TRUE) < "2.7.0") exit_file("Needs TileDB 2.7.* or later")
 
 set.seed(123)                           # just to fix it
 n <- 60
