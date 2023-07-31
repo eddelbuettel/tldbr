@@ -1,6 +1,6 @@
-# tiledb - ongoing development
+# tiledb 0.20.2
 
-* This release of the R package builds against [TileDB 2.16.1](https://github.com/TileDB-Inc/TileDB/releases/tag/2.16.1), and has also been tested against earlier releases as well as the development version
+* This release of the R package builds against [TileDB 2.16.1](https://github.com/TileDB-Inc/TileDB/releases/tag/2.16.1), and has also been tested against earlier releases as well as the development version (#579)
 
 ## Improvements
 
@@ -11,6 +11,10 @@
 * Use of TileDB Embedded was upgraded to release 2.15.3 (#576)
 
 * The tile extend getter function is now able to access a wider range of possible values (#577)
+
+## Build and Test Systems
+
+* The minimal version of TileDB Embedded that can be used with the R package is now release 2.7.0 (#578)
 
 
 # tilebd 0.20.1
