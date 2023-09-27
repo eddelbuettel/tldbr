@@ -1,10 +1,18 @@
-# tiledb ongoing development
+# tiledb 0.21.1
 
-* This release of the R package builds against [TileDB 2.17.0](https://github.com/TileDB-Inc/TileDB/releases/tag/2.17.0), and has also been tested against earlier releases as well as the development version (#583, #587)
+* This release of the R package builds against [TileDB 2.17.1](https://github.com/TileDB-Inc/TileDB/releases/tag/2.17.1), and has also been tested against earlier releases as well as the development version (#593)
 
 ## Improvements
 
-* Array schema evolution has been extended to support enumerations (#590)
+* Array schema evolution has been extended to support enumerations (#590, #591)
+
+* Conversion to and from `integer64` (and `nanotime`) now use package [RcppInt64](https://cran.r-project.org/package=RcppInt64) (#592)
+
+* Use of TileDB Embedded was upgraded to release 2.17.1 (#593)
+
+## Bug Fixes
+
+* An added sorting of factor levels insert has been reverted (#594)
 
 
 # tiledb 0.21.0
@@ -12,6 +20,8 @@
 * This release of the R package builds against [TileDB 2.17.0](https://github.com/TileDB-Inc/TileDB/releases/tag/2.17.0), and has also been tested against earlier releases as well as the development version (#583, #587)
 
 ## Improvements
+
+* Use of TileDB Embedded was upgraded to release 2.17.0 (#583,#587)
 
 * Built-time configuration of TileDB Embedded can now be accessed as a JSON string (#584)
 
