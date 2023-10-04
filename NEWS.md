@@ -6,6 +6,14 @@
 
 * Set conditions are supported in query condition expressions (#597)
 
+* Query conditions expression parsing via `parse_query_conditions` was extended simmilarly (#598)
+
+* Array fragment deletions uses a new static method (with TileDB 2.18.0 or later) (#599)
+
+* The included `nanoarrow` header and source file have been updated to release 0.3.0 (#600)
+
+* Query conditions expression parsing requirements are stated and tested more clearly (#601)
+
 ## Bug Fixes
 
 * The DESCRIPTION file now correctly refers to macOS 10.14 (#596)
