@@ -1,6 +1,6 @@
 # tiledb ongoing development
 
-* This release of the R package builds against [TileDB 2.17.1](https://github.com/TileDB-Inc/TileDB/releases/tag/2.17.1), and has also been tested against earlier releases as well as the development version (#593)
+* This release of the R package builds against [TileDB 2.17.3](https://github.com/TileDB-Inc/TileDB/releases/tag/2.17.3), and has also been tested against earlier releases as well as the development version (#602)
 
 ## Improvements
 
@@ -14,9 +14,20 @@
 
 * Query conditions expression parsing requirements are stated and tested more clearly (#601)
 
+* Use of TileDB Embedded was upgraded to release 2.17.2 (#602)
+
+* Enumeration (aka 'factor') support has been extended for 'empty' creation and subsequent extension with new levelss (#605)
+
+* Use of TileDB Embedded was upgraded to release 2.17.3 (#606)
+
 ## Bug Fixes
 
 * The DESCRIPTION file now correctly refers to macOS 10.14 (#596)
+
+## Build and Test Systems
+
+* The nighly valgrind run was updated to include release 2.17 (#603)
+
 
 
 # tiledb 0.21.1
