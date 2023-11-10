@@ -1,14 +1,29 @@
 # ongoing development
 
+## Build and Test Systems
+
+* Some tests were refactored slightly for greater robustness (#618)
+
+## Documentation
+
+* The README now contains badges for the r-universe and Anaconda versions (in addition to CRAN) (#617)
+
+
+# tiledb 0.21.3
+
 * This release of the R package builds against [TileDB 2.17.4](https://github.com/TileDB-Inc/TileDB/releases/tag/2.17.4), and has also been tested against earlier releases as well as the development version (#611)
 
 ## Improvements
 
 * Query conditioning parsing now supports `factor` index columns other than the standard `integer` type (#614)
 
+## Build and Test Systems
+
+* The nighly valgrind run was updated to include release 2.18 (#615)
+
 ## Documentation
 
-* The pkgdown documentation has been updated for release 0.21.2 (#613)
+* The pkgdown documentation has been updated for release 0.21.2 (#613) and release 0.21.3 (#616)
 
 
 # tiledb 0.21.2
