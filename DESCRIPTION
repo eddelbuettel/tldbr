@@ -1,11 +1,11 @@
 Package: tiledb
 Type: Package
-Version: 0.21.3.4
-Title: Universal Storage Engine for Sparse and Dense Multidimensional Arrays
+Version: 0.22.0.1
+Title: Modern Database Engine for Multi-Modal Data via Sparse and Dense Multidimensional Arrays
 Authors@R: c(person("TileDB, Inc.", role = c("aut", "cph")),
  person("Dirk", "Eddelbuettel", email = "dirk@tiledb.com", role = "cre"))
-Description: The universal storage engine 'TileDB' introduces a
- powerful on-disk format for multi-dimensional arrays. It supports
+Description: The modern database 'TileDB' introduces a powerful on-disk
+ format for multi-modal data based on dimensional arrays. It supports
  dense and sparse arrays, dataframes and key-values stores, cloud
  storage ('S3', 'GCS', 'Azure'), chunked arrays, multiple compression,
  encryption and checksum filters, uses a fully multi-threaded
