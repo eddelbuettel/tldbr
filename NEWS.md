@@ -1,8 +1,14 @@
 # Ongoing development
 
+* This release of the R package builds against [TileDB 2.18.3](https://github.com/TileDB-Inc/TileDB/releases/tag/2.18.3), and has also been tested against earlier releases as well as the development version (#638)
+
 ## Improvements
 
 * A TileDB Array can now be opened in 'keep open' mode for subsequent use without re-opening (#630)
+
+* Arrays with factor (or ordered) variables now grow their factor levels in appending writes (#639)
+
+* Initialization of object walk order in recursive mode is now more explicit (#640)
 
 ## Bug Fixes
 
