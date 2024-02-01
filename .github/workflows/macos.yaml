@@ -1,9 +1,9 @@
 # Run CI for R using https://eddelbuettel.github.io/r-ci/
 
-name: ci
+name: macos
 
 on:
-  push:
+  #push:
   # -- i.e. never
   #pull_request:
   # -- i.e. never
