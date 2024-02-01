@@ -1,3 +1,26 @@
+# Ongoing development
+
+* This release of the R package builds against [TileDB 2.20.0-rc0](https://github.com/TileDB-Inc/TileDB/releases/tag/2.20-rc0), and has also been tested against earlier releases as well as the development version (#651)
+
+## Improvements
+
+* Factor level additions now check for possible over in the index type (#645, #646)
+
+* Aggregate operations can now be performed on dense arrays via a query object with appropriate subarray settings (#650)
+
+## Bug Fixes
+
+* Factor level additions ensure the factor is releveled under the full set of factors (#644)
+
+* The example for `fromDataFrame()` has been updated, along with two other help files (#648)
+
+* Handling of temporary files in one test script has been standardized (#653)
+
+## Build and Test Systems
+
+* The nighly valgrind run was updated to include release 2.20 (#649)
+
+
 # tiledb 0.23.0
 
 * This release of the R package builds against [TileDB 2.19.0](https://github.com/TileDB-Inc/TileDB/releases/tag/2.19.0), and has also been tested against earlier releases as well as the development version (#641)
