@@ -1,0 +1,56 @@
+# Run CI for R using https://eddelbuettel.github.io/r-ci/
+
+name: ci
+
+on:
+  push:
+  # -- i.e. never
+  #pull_request:
+  # -- i.e. never
+  release:
+  workflow_dispatch:
+
+env:
+  _R_CHECK_FORCE_SUGGESTS_: "false"
+
+jobs:
+  ci:
+    strategy:
+      matrix:
+        include:
+          - {os: macOS-14}
+          - {os: macOS-latest}
+          #- {os: ubuntu-latest}
+          #- {os: macos-latest-xlarge}
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: System
+        run: |
+          uname -s
+          uname -m
+
+      - name: Session Before Bootstrap
+        run: Rscript -e 'sessionInfo()'
+
+      - name: Setup
+        uses: eddelbuettel/github-actions/r-ci-setup@master
+
+      - name: Bootstrap
+        run: ./run.sh bootstrap
+
+      - name: System
+        run: Rscript -e 'sessionInfo()'
+
+      - name: Dependencies
+        run: ./run.sh install_all
+
+      - name: Test
+        run: ./run.sh run_tests
+
+      #- name: Coverage
+      #  if: ${{ matrix.os == 'ubuntu-latest' }}
+      #  run: ./run.sh coverage
