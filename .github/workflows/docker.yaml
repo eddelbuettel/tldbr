@@ -46,7 +46,7 @@ jobs:
         ]
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
     - name: Bootstrap
       run: r -p -e 'sessionInfo()'
