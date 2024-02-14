@@ -1,6 +1,6 @@
 Package: tiledb
 Type: Package
-Version: 0.23.0.4
+Version: 0.23.0.5
 Title: Modern Database Engine for Multi-Modal Data via Sparse and Dense Multidimensional Arrays
 Authors@R: c(person("TileDB, Inc.", role = c("aut", "cph")),
  person("Dirk", "Eddelbuettel", email = "dirk@tiledb.com", role = "cre"))
@@ -15,7 +15,7 @@ Description: The modern database 'TileDB' introduces a powerful on-disk
  integrations.
 Copyright: TileDB, Inc.
 License: MIT + file LICENSE
-URL: https://github.com/TileDB-Inc/TileDB-R
+URL: https://github.com/TileDB-Inc/TileDB-R, https://tiledb-inc.github.io/TileDB-R/
 BugReports: https://github.com/TileDB-Inc/TileDB-R/issues
 SystemRequirements: A C++17 compiler is required, and for macOS
  compilation version 11.0 or later is required. Optionally cmake (only
