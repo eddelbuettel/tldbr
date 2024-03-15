@@ -1394,11 +1394,12 @@ XPtr<tiledb::Attribute> libtiledb_attribute(XPtr<tiledb::Context> ctx,
                                             int ncells,
                                             bool nullable) {
     check_xptr_tag<tiledb::Context>(ctx);
+    spdl::debug(tfm::format("[libtiledb_attribute] Attr name %s type %s ncells %d nullable %s",
+                            name, type, ncells, nullable ? "true" : "false"));
     tiledb_datatype_t attr_dtype = _string_to_tiledb_datatype(type);
     if (ncells < 1 && ncells != R_NaInt) {
         Rcpp::stop("ncells must be >= 1 (or NA for variable cells)");
     }
-
     // placeholder, overwritten in all branches below
     XPtr<tiledb::Attribute> attr = XPtr<tiledb::Attribute>(static_cast<tiledb::Attribute*>(nullptr));
 
@@ -1432,11 +1433,6 @@ XPtr<tiledb::Attribute> libtiledb_attribute(XPtr<tiledb::Context> ctx,
                attr_dtype == TILEDB_STRING_ASCII ||
                attr_dtype == TILEDB_STRING_UTF8) {
         attr = make_xptr<tiledb::Attribute>(new tiledb::Attribute(*ctx.get(), name, attr_dtype));
-        uint64_t num = static_cast<uint64_t>(ncells);
-        if (ncells == R_NaInt) {
-            num = TILEDB_VAR_NUM;           // R's NA is different from TileDB's NA
-        }
-        attr->set_cell_val_num(num);
 #if TILEDB_VERSION >= TileDB_Version(2,10,0)
     } else if (attr_dtype == TILEDB_BOOL) {
         attr = make_xptr<tiledb::Attribute>(new tiledb::Attribute(*ctx.get(), name, attr_dtype));
@@ -1450,6 +1446,9 @@ XPtr<tiledb::Attribute> libtiledb_attribute(XPtr<tiledb::Context> ctx,
                    "and character (CHAR,ASCII,UTF8) attributes are supported "
                    "-- seeing %s which is not", type.c_str());
     }
+    // R's NA is different from TileDB's NA so test for NA_integer_, else cast
+    uint64_t num = (ncells == R_NaInt) ? TILEDB_VAR_NUM : static_cast<uint64_t>(ncells);
+    attr->set_cell_val_num(num);
     attr->set_filter_list(*fltrlst);
     attr->set_nullable(nullable);
     return attr;
@@ -4293,29 +4292,25 @@ tiledb::Object::Type _string_to_object_type(std::string otype) {
 // [[Rcpp::export]]
 DataFrame libtiledb_object_walk(XPtr<tiledb::Context> ctx,
                                 std::string uri, std::string order, bool recursive = false) {
-  check_xptr_tag<tiledb::Context>(ctx);
-  std::vector<std::string> uris;
-  std::vector<std::string> types;
-  tiledb::ObjectIter obj_iter(*ctx.get(), uri);
-  if (recursive) {
-    if (!(order == "PREORDER") || (order == "POSTORDER")) {
-      Rcpp::stop("invalid recursive walk order, must be \"PREORDER\" or \"POSTORDER\"");
+    check_xptr_tag<tiledb::Context>(ctx);
+    std::vector<std::string> uris;
+    std::vector<std::string> types;
+    tiledb::ObjectIter obj_iter(*ctx.get(), uri);
+    if (recursive) {
+        if (! ((order == "PREORDER") || (order == "POSTORDER"))) {
+            Rcpp::stop("invalid recursive walk order, must be \"PREORDER\" or \"POSTORDER\"");
+        }
+        tiledb_walk_order_t walk_order = (order == "PREORDER") ? TILEDB_PREORDER : TILEDB_POSTORDER;
+        obj_iter.set_recursive(walk_order);
+    } else {
+        obj_iter.set_non_recursive();
     }
-    tiledb_walk_order_t walk_order = (order == "PREORDER") ? TILEDB_PREORDER : TILEDB_POSTORDER;
-    obj_iter.set_recursive(walk_order);
-  } else {
-    obj_iter.set_non_recursive();
-  }
-  for (const auto& object : obj_iter) {
-    uris.push_back(object.uri());
-    types.push_back(_object_type_to_string(object.type()));
-  }
-  Rcpp::StringVector r_uris(uris.size());
-  r_uris = uris;
-  Rcpp::StringVector r_types(types.size());
-  r_types = types;
-  return Rcpp::DataFrame::create(Rcpp::Named("TYPE") = r_types,
-                                 Rcpp::Named("URI") = r_uris);
+    for (const auto& object : obj_iter) {
+        uris.push_back(object.uri());
+        types.push_back(_object_type_to_string(object.type()));
+    }
+    return Rcpp::DataFrame::create(Rcpp::Named("TYPE") = uris,
+                                   Rcpp::Named("URI") = types);
 }
 
 /**
@@ -4376,8 +4371,7 @@ std::string libtiledb_vfs_create_dir(XPtr<tiledb::VFS> vfs, std::string uri) {
 // [[Rcpp::export]]
 bool libtiledb_vfs_is_dir(XPtr<tiledb::VFS> vfs, std::string uri) {
     check_xptr_tag<tiledb::VFS>(vfs);
-    auto ptr = vfs.get();
-    return ptr->is_dir(uri);
+    return vfs->is_dir(uri);
 }
 
 // [[Rcpp::export]]

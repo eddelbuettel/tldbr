@@ -1,10 +1,28 @@
 # Ongoing Development
 
-* This release of the R package builds against [TileDB 2.20.1](https://github.com/TileDB-Inc/TileDB/releases/tag/2.20.1), and has also been tested against earlier releases as well as the development version (#661)
+* This release of the R package builds against both [TileDB 2.20.1](https://github.com/TileDB-Inc/TileDB/releases/tag/2.20.1)
+  and [TileDB 2.21.0-rc1](https://github.com/TileDB-Inc/TileDB/releases/tag/2.21.0-rc1),
+  and has also been tested against earlier releases as well as the development version (#661, #666, @668)
+
+## Improvements
+
+* The vendored [nanoarrow](https://github.com/apache/arrow-nanoarrow) sources have been update to release 0.4.0, and use of its facilities has been extended (#663)
 
 ## Bug Fixes
 
-* The `tiledb_get_query_range_var()` accessor now correctly calls the range getter for variable-sized dimensions. (#662)
+* The `tiledb_get_query_range_var()` accessor now correctly calls the range getter for variable-sized dimensions (#662)
+
+* The nighly valgrind check now installs to require `nanoarrow` package (#664)
+
+* Variable cell numbers can now set consistently for all attribute types (#670)
+
+* Object walk traversal order detection has been corrected (#671)
+
+## Build and Test Systems
+
+* The nighly valgrind run was updated to include release 2.21 (#669)
+
+* Unit tests have been added for the TileDB 'object' functions (#671)
 
 
 # tiledb 0.24.0
