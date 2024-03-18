@@ -22,7 +22,9 @@
 
 * The nighly valgrind run was updated to include release 2.21 (#669)
 
-* Unit tests have been added for the TileDB 'object' functions (#671)
+* Unit tests have been added for the TileDB 'object' functions (#671, #672)
+
+* Obsolete checks for an ancient Windows version have been removed from the unit tests (#673)
 
 
 # tiledb 0.24.0
