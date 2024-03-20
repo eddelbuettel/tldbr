@@ -1,12 +1,16 @@
 # Ongoing Development
 
 * This release of the R package builds against both [TileDB 2.20.1](https://github.com/TileDB-Inc/TileDB/releases/tag/2.20.1)
-  and [TileDB 2.21.0-rc1](https://github.com/TileDB-Inc/TileDB/releases/tag/2.21.0-rc1),
-  and has also been tested against earlier releases as well as the development version (#661, #666, @668)
+  and [TileDB 2.21.0](https://github.com/TileDB-Inc/TileDB/releases/tag/2.21.0),
+  and has also been tested against earlier releases as well as the development version (#661, #666, #668, #676)
 
 ## Improvements
 
 * The vendored [nanoarrow](https://github.com/apache/arrow-nanoarrow) sources have been update to release 0.4.0, and use of its facilities has been extended (#663)
+
+* Query conditions can be expressed against non-existing enumeration (_i.e._, `factor`) values when TileDB Core 2.21.0 or later is used (#674)
+
+* The `tiledb_array_upgrade_version` helper function to upgrade an schema version is now available (#675)
 
 ## Bug Fixes
 
