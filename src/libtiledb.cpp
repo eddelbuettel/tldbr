@@ -4552,7 +4552,7 @@ Rcpp::DataFrame libtiledb_vfs_ls_recursive(XPtr<tiledb::Context> ctx,
     check_xptr_tag<tiledb::Context>(ctx);
     check_xptr_tag<tiledb::VFS>(vfs);
 
-#if TILEDB_VERSION >= TileDB_Version(2,21,0)
+#if TILEDB_VERSION >= TileDB_Version(2,22,0)
     // standard / default list object (a vector of a pair<string, uint64_t?>) and callback
     tiledb::VFSExperimental::LsObjects ls_objects;
     tiledb::VFSExperimental::LsCallback cb = [&](const std::string_view& path, uint64_t size) {
