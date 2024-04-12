@@ -1,6 +1,6 @@
 # Ongoing Development
 
-* This release of the R package builds against [TileDB 2.21.1](https://github.com/TileDB-Inc/TileDB/releases/tag/2.21.1), and has also been tested against earlier releases as well as the development version (#679)
+* This release of the R package builds against [TileDB 2.22.0-rc1](https://github.com/TileDB-Inc/TileDB/releases/tag/2.22.0-rc1), and has also been tested against earlier releases as well as the development version (#679, #686, #693)
 
 ## Improvements
 
@@ -9,6 +9,8 @@
 * The Arrow integration has been simplified using [nanoarrow](https://github.com/apache/arrow-nanoarrow) returning a single `nanoarrow` object; an unexported helper function `nanoarrow2list()` is provided to matching the previous interface (#682, #685)
 
 * An new accessor for recursive listings of (currently S3-only) URI is now available (with TileDB Core >= 2.22.0) (#691)
+
+* Initial support for TILEDB_GEOM_WKB and TILEB_GEOM_WKT has been added (with TileDB Core >= 2.21.0) (#692)
 
 ## Bug Fixes
 
