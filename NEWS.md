@@ -1,6 +1,22 @@
-# Ongoing Development
+# Ongoing development
 
-* This release of the R package builds against [TileDB 2.21.1](https://github.com/TileDB-Inc/TileDB/releases/tag/2.21.1), and has also been tested against earlier releases as well as the development version (#679)
+## Build and Test Systems
+
+* The test files receives a minor refactoring absorbing two files (#698)
+
+## Deprecations
+
+* Function `libtiledb_array_create_with_key`, accessing a deprecated Core function, is now in `src/deprecated.cpp` and will be removed at later point (#699)
+
+## Removals
+
+* Functions `libtiledb_query_add_range_with_type` and `libtiledb_query_add_range`, deprecated in release 0.17.1 in January 2023, have been now removed (#700).
+
+
+
+# tiledb 0.26.0
+
+* This release of the R package builds against [TileDB 2.22.0](https://github.com/TileDB-Inc/TileDB/releases/tag/2.22.0), and has also been tested against earlier releases as well as the development version (#679, #686, #693, #696)
 
 ## Improvements
 
@@ -20,7 +36,7 @@
 
 * The `configure` and `Makevars.in` received a minor update correcting small issues (#680)
 
-* The nightly valgrind run was updated to include release 2.22.0 (#687)
+* The nightly valgrind run was updated to include release 2.22.0 (#687), release 2.19 and 2.20 have been removed (#695)
 
 ## Documentation
 
@@ -29,6 +45,8 @@
 ## Deprecations
 
 * Functions `tiledb_arrow_array_ptr()`, `tiledb_arrow_schmea_ptr()`, `tiledb_arrow_array_del()` and `tiledb_arrow_schema_del()` are deprecated (in favor of using the corresponding `nanoarrow` functions) and will be removed in a future release (#685)
+
+* The function `tiledb_query_submit_async()` is marked as deprecated (as is the underlying C++ function) and slated for removal in a future release (#694)
 
 
 # tiledb 0.25.0
