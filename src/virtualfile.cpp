@@ -623,7 +623,7 @@ size_t vfile_read(void *dst, size_t size, size_t nitems, struct Rconn *rconn) {
     if (!is.good()) {
         Rcpp::stop("Error opening uri '%s'\n", vstate->uri);
     }
-    auto file_size = vstate->vfs->file_size(vstate->uri);
+    size_t file_size = static_cast<size_t>(vstate->vfs->file_size(vstate->uri));
     auto nread = std::min(size * nitems, file_size);
     is.read((char*)dst, nread);
     return nread;
