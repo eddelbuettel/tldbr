@@ -10,11 +10,11 @@ PKG_LIBS = @CXX17_MACOS@ @TILEDB_LIBS@ @TILEDB_RPATH@
 LIB_CON_DIR = ../inst/lib$(R_ARCH)
 LIB_CON = $(LIB_CON_DIR)/libconnection.so
 
-$(SHLIB): $(LIB_CON)
-
 $(LIB_CON): connection/connection.o
-	@mkdir -p $(LIB_CON_DIR)
-	@$(SHLIB_LINK) $(SHLIB_LIBADD) $(LIBR) -o $@ $^
+	mkdir -p $(LIB_CON_DIR)
+	$(SHLIB_LINK) $(SHLIB_LIBADD) $(LIBR) -o $@ $^
+
+$(SHLIB): $(LIB_CON)
 
 all: $(SHLIB)
         # if we are
@@ -22,6 +22,8 @@ all: $(SHLIB)
         #  - the library is present (implying non-system library use)
         # then let us call install_name_tool
 	if [ `uname -s` = 'Darwin' ]; then \
+	    ls -lR ../inst/tiledb/lib
 	    install_name_tool -change libz.1.dylib @rpath/libz.1.dylib ../inst/tiledb/lib/libtiledb.dylib; \
 	    install_name_tool -add_rpath @loader_path/../tiledb/lib tiledb.so; \
+	    install_name_tool -add_rpath @loader_path/../tiledb/lib $(LIB_CON); \
 	fi
