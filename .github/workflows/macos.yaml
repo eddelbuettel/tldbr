@@ -3,7 +3,7 @@
 name: macos
 
 on:
-  push:
+  #push:
   #pull_request:
   release:
   workflow_dispatch:

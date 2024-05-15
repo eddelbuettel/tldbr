@@ -18,7 +18,7 @@ PKG_LIBS = \
 
 LIB_CON = ../inst/lib$(R_ARCH)/libconnection.dll
 
-all: $(OBJECTS) $(SHLIB) $(LIB_CON) winlibs
+all: winlibs $(OBJECTS) $(SHLIB) $(LIB_CON)
 
 $(LIB_CON): connection/connection.o
 	mkdir -p $(dir $(LIB_CON))
