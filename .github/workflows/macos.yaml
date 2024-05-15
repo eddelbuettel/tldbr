@@ -31,8 +31,8 @@ jobs:
           uname -s
           uname -m
 
-      - name: Session Before Bootstrap
-        run: Rscript -e 'sessionInfo()'
+      #- name: Session Before Bootstrap
+      #  run: Rscript -e 'sessionInfo()'
 
       - name: Setup
         uses: eddelbuettel/github-actions/r-ci-setup@master
@@ -48,6 +48,10 @@ jobs:
 
       - name: Test
         run: ./run.sh run_tests
+
+      - name: Show Logs log
+        run: ./run.sh dump_logs
+        if: failure()
 
       #- name: Coverage
       #  if: ${{ matrix.os == 'ubuntu-latest' }}
