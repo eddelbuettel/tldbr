@@ -1,8 +1,18 @@
-# Ongoing development
+# tiledb 0.27.0
+
+* This release of the R package builds against [TileDB 2.23.0](https://github.com/TileDB-Inc/TileDB/releases/tag/2.23.0), and has also been tested against earlier releases as well as the development version (#701, #704)
+
+## Improvements
+
+* Group elements can now be deleted (#702)
+
+* Two error messages now show the human-readable type representation instead of the enum counter value (#705)
 
 ## Build and Test Systems
 
 * The test files receives a minor refactoring absorbing two files (#698)
+
+* The nightly valgrind run was updated to include release 2.23.0, release 2.21 has been removed (#703)
 
 ## Deprecations
 

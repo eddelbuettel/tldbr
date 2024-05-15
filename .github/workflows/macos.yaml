@@ -3,10 +3,8 @@
 name: macos
 
 on:
-  #push:
-  # -- i.e. never
+  push:
   #pull_request:
-  # -- i.e. never
   release:
   workflow_dispatch:
 
@@ -18,7 +16,7 @@ jobs:
     strategy:
       matrix:
         include:
-          - {os: macOS-14}
+          #- {os: macOS-14}
           - {os: macOS-latest}
           #- {os: ubuntu-latest}
           #- {os: macos-latest-xlarge}

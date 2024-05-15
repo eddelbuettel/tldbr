@@ -1,6 +1,6 @@
 on:
-  #push:
-  #pull_request:
+  push:
+  pull_request:
   release:
 
 name: windows
@@ -12,8 +12,8 @@ jobs:
       fail-fast: false
       matrix:
         include: [
-          { windows: windows-latest, r: release },
-          { windows: windows-latest, r: devel   }
+          #{ windows: windows-latest, r: devel   },
+          { windows: windows-latest, r: release }
         ]
     steps:
       - run: git config --global core.autocrlf false

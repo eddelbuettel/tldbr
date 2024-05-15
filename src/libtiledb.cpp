@@ -2591,7 +2591,7 @@ bool libtiledb_array_put_metadata(XPtr<tiledb::Array> array,
       break;
     }
     default: {
-      Rcpp::stop("No support (yet) for type '%d'.", TYPEOF(obj));
+      Rcpp::stop("No support (yet) for type '%s'.", Rf_type2char(TYPEOF(obj)));
       break; // not reached
     }
   }
@@ -5016,7 +5016,7 @@ bool libtiledb_group_put_metadata(XPtr<tiledb::Group> grp, std::string key, SEXP
         break;// not reached
     }
     default: {
-        Rcpp::stop("No support (yet) for type '%d'.", TYPEOF(obj));
+        Rcpp::stop("No support (yet) for type '%s'.", Rf_type2char(TYPEOF(obj)));
         break; // not reached
     }
     }
@@ -5171,7 +5171,7 @@ void libtiledb_group_delete(XPtr<tiledb::Group> grp,
 #if TILEDB_VERSION >= TileDB_Version(2,14,0)
     grp->delete_group(uri, recursive);
 #else
-    Rcpp::message(Rcpp::wrap("This function is only available with TileDB Core 2.14.0"));
+    Rcpp::message(Rcpp::wrap("This function is only available with TileDB Core 2.14.0 or later"));
 #endif
 }
 
