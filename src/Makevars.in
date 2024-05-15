@@ -21,9 +21,12 @@ all: $(SHLIB)
         #  - on macOS aka Darwin which needs this
         #  - the library is present (implying non-system library use)
         # then let us call install_name_tool
+	echo "*** install_name_tool"
 	if [ `uname -s` = 'Darwin' ]; then \
 	    ls -lR ../inst/tiledb/lib
 	    install_name_tool -change libz.1.dylib @rpath/libz.1.dylib ../inst/tiledb/lib/libtiledb.dylib; \
 	    install_name_tool -add_rpath @loader_path/../tiledb/lib tiledb.so; \
 	    install_name_tool -add_rpath @loader_path/../tiledb/lib $(LIB_CON); \
 	fi
+
+.PHONY: all clean
