@@ -59,7 +59,7 @@ jobs:
     #  run: docker run --rm -i -v $(pwd):/mnt -w /mnt eddelbuettel/rocker-tiledb:${{ matrix.tag }} Rscript -e 'if (getRversion() < "4.1.0") unlink("inst/tinytest/test_tiledbarray_410.R")'
 
     - name: nanoarrow
-      run: Rscript -e 'install.packages("nanoarrow")'
+      run: Rscript -e 'bspm::disable(); install.packages("nanoarrow")'
 
     - name: Build
       run: R CMD build --no-manual --no-build-vignettes .
