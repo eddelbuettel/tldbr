@@ -161,7 +161,7 @@ expect_equal(as.numeric(tiledb_fragment_info_get_timestamp_range(fi,2))*1000, c(
 
 ## earlier time travel test recast via timestamp_{start,end}
 ## time travel
-if (FALSE) {
+
 tmp <- tempfile()
 dir.create(tmp)
 dom <- tiledb_domain(dims = c(tiledb_dim("rows", c(1L, 10L), 5L, "INT32"),
@@ -195,4 +195,3 @@ A <- tiledb_array(uri = tmp, return_as="data.frame", timestamp_start=now1 - epst
 expect_equal(nrow(A[]), 3)
 A <- tiledb_array(uri = tmp, return_as="data.frame", timestamp_start=now1 - epst, timestamp_end=now2 + epst)
 expect_true(nrow(A[]) >= 3)
-}

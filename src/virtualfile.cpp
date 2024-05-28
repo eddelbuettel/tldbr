@@ -1,4 +1,10 @@
 
+// This file borrows, with acknowledgements, from the MIT-licensed code in the
+// repository at https://github.com/coolbutuseless/rconnection and adapts it (in
+// a slightly simplified version) to TileDB. It also uses the approach employed
+// in the also MIT-licensed repository https://github.com/r-lib/archive to deploy
+// a connection from within R without triggering a warning from package checks.
+
 #include <Rcpp/Lighter>         				// for Rcpp
 #include <tinyspdl.h>                           // for spdl logging
 #include "connection/connection.h"              // for connections
@@ -6,13 +12,39 @@
 
 extern "C" SEXP vfile_c_impl_(SEXP, SEXP, SEXP);
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Initialize a vfile() R connection object to return to the user
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//' Create a custom file connection
+//'
+//' @details
+//' This \code{vfs_file()} connection works like the \code{file()} connection in R itself.
+//'
+//' This connection works with both ASCII and binary data, e.g. using
+//' \code{readLines()} and \code{readBin()}.
+//'
+//' @param description path to a filename; contrary to \code{rconnection} a connection
+//' object is not supported.
+//' @param open character string. A description of how to open the connection if
+//' it is to be opened upon creation e.g. "rb". Default "" (empty string) means
+//' to not open the connection on creation - user must still call \code{open()}.
+//' Note: If an "open" string is provided, the user must still call \code{close()}
+//' otherwise the contents of the file aren't completely flushed until the
+//' connection is garbage collected.
+//' @param verbosity integer value 0, 1, or 2. Default: 0.
+//' Set to \code{0} for no debugging messages, \code{1} for some high-level messages
+//' and \code{verbosity = 2} for all debugging messages.
+//'
+//' @export
+//'
+//' @examples
+//' \dontrun{
+//' tmp <- tempfile()
+//' dat <- as.raw(1:255)
+//' writeBin(dat, vfs_file(tmp))
+//' readBin(vfs_file(tmp),  raw(), 1000)
+//' }
 // [[Rcpp::export]]
-SEXP vfile_(SEXP description, SEXP mode, SEXP verbosity) {
+SEXP vfs_file(std::string description, std::string mode = "", int verbosity = 0) {
     spdl::debug("[vfile_] entered");
-    return vfile_c_impl_(description, mode, verbosity);
+    return vfile_c_impl_(Rcpp::wrap(description), Rcpp::wrap(mode), Rcpp::wrap(verbosity));
 }
 
 extern "C" {
@@ -468,7 +500,7 @@ Rboolean vfile_open(struct Rconn *rconn) {
         }
     }
 
-    if (rconn->text) {
+    if (rconn->text && rconn->canread) {
         tiledb::VFS::filebuf sbuf(*vstate->vfs);
         sbuf.open(vstate->uri, std::ios::in);
         std::istream is(&sbuf);
@@ -479,6 +511,15 @@ Rboolean vfile_open(struct Rconn *rconn) {
         vstate->buf.resize(file_size);
         is.read((char*) vstate->buf.data(), file_size);
         vstate->nread = 0;
+        sbuf.close();
+    }
+
+    if (rconn->canwrite) {
+        if (vstate->vfs->is_file(vstate->uri)) {
+            if (vstate->verbosity > 0)
+                Rprintf("Uri '%s' exists, removing", vstate->uri);
+            vstate->vfs->remove_file(vstate->uri);
+        }
     }
 
     return TRUE;
@@ -621,11 +662,12 @@ size_t vfile_read(void *dst, size_t size, size_t nitems, struct Rconn *rconn) {
     sbuf.open(vstate->uri, std::ios::in);
     std::istream is(&sbuf);
     if (!is.good()) {
-        Rcpp::stop("Error opening uri '%s'\n", vstate->uri);
+        Rcpp::stop("Error opening uri '%s' for reads\n", vstate->uri);
     }
     size_t file_size = static_cast<size_t>(vstate->vfs->file_size(vstate->uri));
     auto nread = std::min(size * nitems, file_size);
     is.read((char*)dst, nread);
+    sbuf.close();
     return nread;
 #endif
 }
@@ -681,12 +723,24 @@ size_t vfile_write(const void *src, size_t size, size_t nitems, struct Rconn *rc
     if (vstate->verbosity > 0) Rprintf("vfile_write(size = %zu, nitems = %zu)\n", size, nitems);
 
     size_t wlen = 0;
+#if 0
     if (vstate->is_file) {
         wlen = fwrite(src, 1, size * nitems, vstate->fp);
     /* } else { */
         /* wlen = R_WriteConnection(vstate->inner, (void *)src, size * nitems); */
     }
-
+#else
+    tiledb::VFS::filebuf sbuf(*vstate->vfs);
+    sbuf.open(vstate->uri, std::ios::out);
+    std::ostream os(&sbuf);
+    if (!os.good()) {
+        Rcpp::stop("Error opening uri '%s' for writes\n", vstate->uri);
+    }
+    wlen = size * nitems;
+    os.write((char*)src, wlen);
+    os.flush();
+    sbuf.close();
+#endif
     return wlen;
 }
 
@@ -742,12 +796,23 @@ int vfile_vfprintf(struct Rconn *rconn, const char* fmt, va_list ap) {
     display_buf[40] = '\0';
     if (vstate->verbosity > 0) Rprintf("vfile_vfprintf('%s ...')\n", display_buf);
 
+#if 0
     if (vstate->is_file) {
         fwrite(str_buf, 1, wlen, vstate->fp);
     } else {
         /* R_WriteConnection(vstate->inner, str_buf, wlen);   */
     }
-
+#else
+    tiledb::VFS::filebuf sbuf(*vstate->vfs);
+    sbuf.open(vstate->uri, std::ios::app);
+    std::ostream os(&sbuf);
+    if (!os.good()) {
+        Rcpp::stop("Error opening uri '%s' for writes\n", vstate->uri);
+    }
+    os.write((char*)str_buf, wlen);
+    os.flush();
+    sbuf.close();
+#endif
     return wlen;
 }
 
@@ -756,13 +821,11 @@ int vfile_vfprintf(struct Rconn *rconn, const char* fmt, va_list ap) {
 // Setup initialization
 
 SEXP new_connection_xptr;
-SEXP read_connection_xptr;
 
-extern "C" void tldb_init_(SEXP nc_xptr, SEXP rc_xptr) {
+// [[Rcpp::export]]
+void tldb_init_(SEXP nc_xptr) {
     new_connection_xptr = nc_xptr;
     R_PreserveObject(nc_xptr);
-    read_connection_xptr = rc_xptr;
-    R_PreserveObject(rc_xptr);
 }
 
 SEXP new_connection(const char* description, const char* mode,
