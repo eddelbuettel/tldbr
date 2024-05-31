@@ -1,12 +1,16 @@
 # Ongoing development
 
-* This release of the R package builds against [TileDB 2.23.0](https://github.com/TileDB-Inc/TileDB/releases/tag/2.23.0), and has also been tested against earlier releases as well as the development version (#701, #704)
+* This release of the R package builds against [TileDB 2.24.0-rc0](https://github.com/TileDB-Inc/TileDB/releases/tag/2.24.0-rc0), and has also been tested against earlier releases as well as the development version (#701, #704)
 
 ## Improvements
 
 * Three internal and unexported helper functions now document more clearly how they can be called explicitly. (#709)
 
 * Reading and writing of text- and binary files supported by a VFS backend is now supported. (#710)
+
+## Build and Test Systems
+
+* Building TileDB Embedded from source now uses `tiledb install-tiledb` as targets in a single CMake step. (#711, #713)
 
 
 # tiledb 0.27.0
@@ -32,7 +36,6 @@
 ## Removals
 
 * Functions `libtiledb_query_add_range_with_type` and `libtiledb_query_add_range`, deprecated in release 0.17.1 in January 2023, have been now removed (#700).
-
 
 
 # tiledb 0.26.0
