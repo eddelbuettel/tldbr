@@ -1,6 +1,6 @@
-# Ongoing development
+# tiledb 0.28.0
 
-* This release of the R package builds against [TileDB 2.24.0-rc1](https://github.com/TileDB-Inc/TileDB/releases/tag/2.24.0-rc1), and has also been tested against earlier releases as well as the development version (#714, #715)
+* This release of the R package builds against [TileDB 2.24.0](https://github.com/TileDB-Inc/TileDB/releases/tag/2.24.0), and has also been tested against earlier releases as well as the development version (#714, #715, #717)
 
 ## Improvements
 
@@ -11,6 +11,8 @@
 ## Build and Test Systems
 
 * Building TileDB Embedded from source now uses `tiledb install-tiledb` as targets in a single CMake step. (#711, #713)
+
+* The time-travel tests now uses absolute (given) timestamps for writes as well as reads. (#716)
 
 
 # tiledb 0.27.0
