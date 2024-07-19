@@ -72,7 +72,10 @@ expect_equal(tiledb_fragment_info_get_unconsolidated_metadata_num(fraginf), 1)
 
 
 
-## fragment info deletion tests
+## fragment info deletion tests (for TileDB 2.18.0 or later)
+
+if (tiledb_version(TRUE) < "2.18.0") exit_file("Remainder needs 2.18.* or later")
+
 
 uri <- tempfile()
 if (dir.exists(uri)) unlink(uri, TRUE)

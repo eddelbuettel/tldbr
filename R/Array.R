@@ -185,7 +185,11 @@ tiledb_array_delete_fragments <- function(arr, ts_start, ts_end, ctx = tiledb_ge
 tiledb_array_delete_fragments_list <- function(arr, fragments, ctx = tiledb_get_context()) {
     stopifnot("The 'arr' argument must be a tiledb_array object" = .isArray(arr),
               "The 'fragments' argument must be a character vector" = is.character(fragments))
-    libtiledb_array_delete_fragments_list(ctx@ptr, arr@ptr, fragments)
+    if (tiledb_version(TRUE) >= "2.18.0") {
+        libtiledb_array_delete_fragments_list(ctx@ptr, arr@ptr, fragments)
+    } else {
+        message("This function is only available with TileDB 2.18.0 or later")
+    }
     invisible(TRUE)
 }
 
