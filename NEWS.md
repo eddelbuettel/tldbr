@@ -10,6 +10,10 @@
 
 * The vendored [nanoarrow](https://github.com/apache/arrow-nanoarrow) has been updated to its release [0.5.0](https://github.com/apache/arrow-nanoarrow/releases/tag/apache-arrow-nanoarrow-0.5.0) (#733)
 
+* Fragments can now be removed by supplying a vector of fragment URIs (#734)
+
+* `NDRectangle` and `CurrentDomain` objects are supported (with 2.25.0 or newer) (#735)
+
 ## Build and Test Systems
 
 * The nighly valgrind matrix now includes release 2.25.0 (#729)
