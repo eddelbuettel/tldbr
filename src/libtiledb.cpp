@@ -471,6 +471,27 @@ tiledb_vfs_mode_t _string_to_tiledb_vfs_mode_t(std::string modestr) {
   }
 }
 
+#if TILEDB_VERSION >= TileDB_Version(2,25,0)
+std::string _tiledb_current_domain_type_to_string(tiledb_current_domain_type_t type) {
+    if (type == TILEDB_NDRECTANGLE) {
+        return std::string{"NDRECTANGLE"};
+    } else {
+        Rcpp::stop("Unknown TileDB CurrentDomain type (%d)", (int32_t) type);
+    }
+    return std::string();
+}
+#endif
+
+#if TILEDB_VERSION >= TileDB_Version(2,25,0)
+tiledb_current_domain_type_t _string_to_tiledb_current_domain_type(std::string typestr) {
+    if (typestr == "NDRECTANGLE") {
+        return TILEDB_NDRECTANGLE;
+    } else {
+        Rcpp::stop("Unknown TileDB CurrentDomain type '%s'", typestr.c_str());
+    }
+}
+#endif
+
 // NB Limited type coverage here as aimed to sizing R allocations of either int, double or char
 // Also note that there is 'inline size_t type_size(tiledb_datatype_t type)' in core_interface.h
 const size_t _tiledb_datatype_sizeof(const tiledb_datatype_t dtype) {
@@ -850,7 +871,7 @@ XPtr<tiledb::Dimension> libtiledb_dim(XPtr<tiledb::Context> ctx,
 
     } else if (dtype == TILEDB_STRING_ASCII) {
         if (Rf_isNull(domain) && Rf_isNull(tile_extent)) {
-            auto d = tiledb::Dimension::create(*ctx.get(), name, TILEDB_STRING_ASCII, nullptr, nullptr);
+            auto d = tiledb::Dimension::create(*ctx.get(), name, dtype, nullptr, nullptr);
             auto dim = new tiledb::Dimension(d);
             auto ptr = make_xptr<tiledb::Dimension>(dim);
             return ptr;
@@ -2260,6 +2281,18 @@ libtiledb_array_schema_evolution_extend_enumeration(XPtr<tiledb::Context> ctx,
     tiledb::ArraySchemaEvolution res = ase->extend_enumeration(new_enumeration);
     auto ptr = new tiledb::ArraySchemaEvolution(res);
     return make_xptr<tiledb::ArraySchemaEvolution>(ptr);
+#endif
+    return ase;
+}
+
+//[[Rcpp::export]]
+XPtr<tiledb::ArraySchemaEvolution>
+libtiledb_array_schema_evolution_expand_current_domain(XPtr<tiledb::ArraySchemaEvolution> ase,
+                                                       XPtr<tiledb::CurrentDomain> cd) {
+    check_xptr_tag<tiledb::ArraySchemaEvolution>(ase);
+    check_xptr_tag<tiledb::CurrentDomain>(cd);
+#if TILEDB_VERSION >= TileDB_Version(2,25,0)
+    ase->expand_current_domain(*cd.get());
 #endif
     return ase;
 }
@@ -5474,7 +5507,7 @@ std::string libtiledb_current_domain_type(XPtr<tiledb::CurrentDomain> cd) {
     check_xptr_tag<tiledb::CurrentDomain>(cd);
 #if TILEDB_VERSION >= TileDB_Version(2,25,0)
     auto tp = cd->type();
-    auto str = std::string(_tiledb_datatype_to_string(static_cast<tiledb_datatype_t>(tp)));
+    auto str = std::string(_tiledb_current_domain_type_to_string(tp));
     return str;
 #else
     return std::string();
