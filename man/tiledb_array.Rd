@@ -10,7 +10,6 @@ tiledb_array(
   uri,
   query_type = c("READ", "WRITE"),
   is.sparse = NA,
-  as.data.frame = FALSE,
   attrs = character(),
   extended = TRUE,
   selected_ranges = list(),
@@ -18,8 +17,6 @@ tiledb_array(
   query_layout = character(),
   datetimes_as_int64 = FALSE,
   encryption_key = character(),
-  as.matrix = FALSE,
-  as.array = FALSE,
   query_condition = new("tiledb_query_condition"),
   timestamp_start = as.POSIXct(double(), origin = "1970-01-01"),
   timestamp_end = as.POSIXct(double(), origin = "1970-01-01"),
@@ -30,7 +27,8 @@ tiledb_array(
   sil = list(),
   dumpbuffers = character(),
   buffers = list(),
-  ctx = tiledb_get_context()
+  ctx = tiledb_get_context(),
+  as.data.frame = FALSE
 )
 
 tiledb_dense(...)
@@ -43,8 +41,6 @@ tiledb_sparse(...)
 \item{query_type}{optionally loads the array in "READ" or "WRITE" only modes.}
 
 \item{is.sparse}{optional logical switch, defaults to "NA" letting array determine it}
-
-\item{as.data.frame}{optional logical switch, defaults to "FALSE"}
 
 \item{attrs}{optional character vector to select attributes, default is
 empty implying all are selected, the special value \code{NA_character_}
@@ -68,12 +64,6 @@ representation as \sQuote{raw} \code{integer64} and not as \code{Date},
 
 \item{encryption_key}{optional A character value with an AES-256 encryption key
 in case the array was written with encryption.}
-
-\item{as.matrix}{optional logical switch, defaults to "FALSE"; currently limited to dense
-matrices; in the case of multiple attributes in query a list of matrices is returned}
-
-\item{as.array}{optional logical switch, defaults to "FALSE"; in the case of multiple
-attributes in query a list of arrays is returned}
 
 \item{query_condition}{optional \code{tiledb_query_condition} object, by default uninitialized
 without a condition; this functionality requires TileDB 2.3.0 or later}
@@ -109,6 +99,10 @@ parsed.}
 \item{buffers}{An optional list with full pathnames of shared memory buffers to read data from}
 
 \item{ctx}{optional tiledb_ctx}
+
+\item{as.data.frame}{An optional deprecated alternative to \code{return_as="data.frame"} which has
+been deprecated and removed, but is still used in one BioConductor package; this argument will be removed
+once the updated package has been released.}
 
 \item{...}{Used as a pass-through for \code{tiledb_dense}
 and \code{tiledb_sparse} aliasing}
